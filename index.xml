@@ -296,11 +296,11 @@ This blog will containt posts about everything webdev-related, from Ruby and Rai
     </item>
     
     <item>
-      <title>Getting started</title>
-      <link>https://szeliga.github.io/2016/04/20/getting-started</link>
+      <title>Getting started with Golang</title>
+      <link>https://szeliga.github.io/2016/04/20/getting-started-with-golang</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://szeliga.github.io/2016/04/20/getting-started</guid>
+      <guid>https://szeliga.github.io/2016/04/20/getting-started-with-golang</guid>
       <description>&lt;p&gt;I was always thrilled about learning new stuff, and recently that new stuff happened to be Go.
 Why Go? I was hesitating between Rust, Elixir and Go. After some googling I found out that Go is the fastest of the three and the most mature one.&lt;/p&gt;
 

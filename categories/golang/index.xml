@@ -284,5 +284,36 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
 </description>
     </item>
     
+    <item>
+      <title>Getting started with Golang</title>
+      <link>https://szeliga.github.io/2016/04/20/getting-started-with-golang</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://szeliga.github.io/2016/04/20/getting-started-with-golang</guid>
+      <description>&lt;p&gt;I was always thrilled about learning new stuff, and recently that new stuff happened to be Go.
+Why Go? I was hesitating between Rust, Elixir and Go. After some googling I found out that Go is the fastest of the three and the most mature one.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve always enjoyed implementing raytracing algorithms, it is the most rewarding kind of programming, when after hours of brain-twisting programming you can see the result in a form of a beautiful, rendered image.
+I&amp;rsquo;ve also found that implementing raytracers is the fastest way to learn a new language, because it touches on all the basic concepts:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;collections&lt;/li&gt;
+&lt;li&gt;file I/O&lt;/li&gt;
+&lt;li&gt;concurrency&lt;/li&gt;
+&lt;li&gt;packaging and architecture&lt;/li&gt;
+&lt;li&gt;branching, looping, recursion&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The project will be written using TDD where it is possible. For testing I will be using the following packages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;testing&lt;/code&gt; - the Go test package&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;testify&lt;/code&gt; - from &lt;a href=&#34;https://github.com/stretchr/testify&#34;&gt;stretchr&lt;/a&gt;, mainly the &lt;code&gt;assert&lt;/code&gt; package&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I will attach test code in snippets, where available.&lt;/p&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>

@@ -1,7 +1,7 @@
-	<!DOCTYPE html>
+		<!DOCTYPE html>
 <html lang="en-us">
 <head>
-	<title>Golang &middot; After Eight Coding</title>
+	<title>Getting started with Golang &middot; After Eight Coding</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-Frame-Options" content="sameorigin">
@@ -17,9 +17,6 @@
 
 	<!-- RSS -->
 	
-	  	<link href="https://szeliga.github.io/categories/golang/index.xml" rel="alternate" type="application/rss+xml" title="After Eight Coding" />
-	  	<link href="https://szeliga.github.io/categories/golang/index.xml" rel="feed" type="application/rss+xml" title="After Eight Coding" />
-	
 
 	<!-- Font Awesome -->
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -27,8 +24,8 @@
 	<!-- Google Fonts -->
 	<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css">
 </head>
-	<body>
-		<header class="site-header">
+		<body>
+			<header class="site-header">
 	<div class="branding">
 		<a href="https://szeliga.github.io/">
 		
@@ -121,65 +118,59 @@
 	</nav>
 </header>
 
+			<div class="content">
+				
+				<article>
+					<header>
+						<h1 class="title">Getting started with Golang</h1>
+					</header>
+				
 
-		<div class="content">
-			<div class="posts">
-	
-	
-	<div class="post-teaser">
-		<header>
-			<h1>
-			<a class="post-link" href="https://szeliga.github.io/2016/05/01/vector-operations">
-				Vector operations
-			</a>
-			</h1>
-			<p class="meta">
-				May 5, 2016
-        &middot; 6 minute read
-        &middot;  golang  raytracer 
-			</p>
-		</header>
-		<div class="excerpt">
-			
-				Revising and implementing the vector math hiding behind the core idea of a ray tracer
-			
-			<br>
-			<a class="button" href="https://szeliga.github.io/2016/05/01/vector-operations">
-				Continue reading
-			</a>
-		</div>
-	</div>
-	
-	<div class="post-teaser">
-		<header>
-			<h1>
-			<a class="post-link" href="https://szeliga.github.io/2016/04/20/getting-started-with-golang">
-				Getting started with Golang
-			</a>
-			</h1>
-			<p class="meta">
-				April 4, 2016
-        &middot; 1 minute read
-        &middot;  golang  raytracer 
-			</p>
-		</header>
-		<div class="excerpt">
-			
-				First post in the series about implementing a Raytracer in Golang
-			
-			<br>
-			<a class="button" href="https://szeliga.github.io/2016/04/20/getting-started-with-golang">
-				Continue reading
-			</a>
-		</div>
-	</div>
-	
-</div>
+				<section class="post-content">
+					<p>I was always thrilled about learning new stuff, and recently that new stuff happened to be Go.
+Why Go? I was hesitating between Rust, Elixir and Go. After some googling I found out that Go is the fastest of the three and the most mature one.</p>
 
-			<div class="pagination">
-	
-</div>
+<p>I&rsquo;ve always enjoyed implementing raytracing algorithms, it is the most rewarding kind of programming, when after hours of brain-twisting programming you can see the result in a form of a beautiful, rendered image.
+I&rsquo;ve also found that implementing raytracers is the fastest way to learn a new language, because it touches on all the basic concepts:</p>
 
+<ul>
+<li>collections</li>
+<li>file I/O</li>
+<li>concurrency</li>
+<li>packaging and architecture</li>
+<li>branching, looping, recursion</li>
+</ul>
+
+<p>The project will be written using TDD where it is possible. For testing I will be using the following packages:</p>
+
+<ul>
+<li><code>testing</code> - the Go test package</li>
+<li><code>testify</code> - from <a href="https://github.com/stretchr/testify">stretchr</a>, mainly the <code>assert</code> package</li>
+</ul>
+
+<p>I will attach test code in snippets, where available.</p>
+
+
+				<hr>
+
+				<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'goray-devblog';
+    var disqus_identifier = 'https:\/\/szeliga.github.io\/2016\/04\/20\/getting-started-with-golang';
+    var disqus_title = 'Getting started with Golang';
+    var disqus_url = 'https:\/\/szeliga.github.io\/2016\/04\/20\/getting-started-with-golang';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</section>
+
+			</article>
 			<footer class="site-footer">
 	<p class="text">&copy; 2016 - by Szymon Szeliga - Powered by <a href="//gohugo.io">Hugo</a> - Theme: <a href="//github.com/digitalcraftsman/hugo-type-theme">Type</a></p>
 </footer>
@@ -196,6 +187,5 @@ ga('send', 'pageview');
 </script>
 
 		</div>
-
 	</body>
 </html>
