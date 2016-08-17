@@ -291,7 +291,17 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
       
       <guid>https://szeliga.github.io/about/</guid>
       <description>&lt;p&gt;My name is Szymon Szeliga, I work as a Senior Ruby on Rails dev in Netguru.
-I was always thrilled about learning new stuff, and recently that new stuff happened to be Go.
+This blog will containt posts about everything webdev-related, from Ruby and Rails, through databases (Postgres mostly), to exploring new languages and frameworks.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Getting started</title>
+      <link>https://szeliga.github.io/2016/04/20/getting-started</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://szeliga.github.io/2016/04/20/getting-started</guid>
+      <description>&lt;p&gt;I was always thrilled about learning new stuff, and recently that new stuff happened to be Go.
 Why Go? I was hesitating between Rust, Elixir and Go. After some googling I found out that Go is the fastest of the three and the most mature one.&lt;/p&gt;
 
 &lt;p&gt;I&amp;rsquo;ve always enjoyed implementing raytracing algorithms, it is the most rewarding kind of programming, when after hours of brain-twisting programming you can see the result in a form of a beautiful, rendered image.
@@ -313,20 +323,6 @@ I&amp;rsquo;ve also found that implementing raytracers is the fastest way to lea
 &lt;/ul&gt;
 
 &lt;p&gt;I will attach test code in snippets, where available.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Getting started</title>
-      <link>https://szeliga.github.io/2016/04/20/getting-started</link>
-      <pubDate>Wed, 20 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>https://szeliga.github.io/2016/04/20/getting-started</guid>
-      <description>&lt;p&gt;The main goal of this blog is to document the process of learning Go by me. I will be implementing a basic ray tracing algorithm, that will be able to render spheres and triangles, and use Lambert and Phong materials.&lt;/p&gt;
-
-&lt;p&gt;My ultimate goal here is to learn more about Go and Goroutines. It is possible that this will evolve into a path tracer.&lt;/p&gt;
-
-&lt;p&gt;Stay tuned.&lt;/p&gt;
 </description>
     </item>
     
