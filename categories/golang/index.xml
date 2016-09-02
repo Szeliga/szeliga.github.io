@@ -368,7 +368,7 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
 &lt;p&gt;The cross product can be also used for calculating a surface normal (the surface that is defined by the two vectors).
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Cross_product_parallelogram.svg/440px-Cross_product_parallelogram.svg.png&#34; alt=&#34;Cross product&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/cross_product.png&#34; alt=&#34;Cross product&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
