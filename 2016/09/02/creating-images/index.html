@@ -1,0 +1,296 @@
+		<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<title>Creating images &middot; After Eight Coding</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-Frame-Options" content="sameorigin">
+	<meta name="author" content="Szymon Szeliga">
+	<meta name="description" content="A development journal about writting a ray tracer in Go">
+	<meta name="generator" content="Hugo 0.16" />
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="https://szeliga.github.io/css/main.css">
+
+	<!--Favicon-->
+	<link rel="shortcut icon" href="https://szeliga.github.io/favicon.ico" type="image/x-icon">
+
+	<!-- RSS -->
+	
+
+	<!-- Font Awesome -->
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- Google Fonts -->
+	<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" rel="stylesheet" type="text/css">
+</head>
+
+		<body>
+			<header class="site-header">
+	<div class="branding">
+		<a href="https://szeliga.github.io/">
+		
+			<img class="avatar" src="https://www.gravatar.com/avatar/9f51c29157a82507ca44f5f9617ba26c?s=100&d=identicon" alt=""/>
+		
+		</a>
+		<h1 class="site-title">
+			<a href="https://szeliga.github.io/">After Eight Coding</a>
+		</h1>
+	</div>
+	<nav class="site-nav">
+		<ul>
+	      	
+	        	<li><a href="/about/"> About </a></li>
+	      	
+
+	      	
+<li>
+	<a href="https://szeliga.github.io/" title="">
+		<i class="fa fa-fw fa-home"></i>
+	</a>
+</li>
+
+
+
+<li>
+	<a href="https://szeliga.github.io/index.xml" title="Subcribe">
+		<i class="fa fa-fw fa-rss"></i>
+	</a>
+</li>
+
+
+
+<li>
+	<a href="mailto:szeliga.szymon@gmail.com" title="Email">
+		<i class="fa fa-fw fa-envelope"></i>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li>
+	<a href="https://github.com/Szeliga" title="Github">
+		<i class="fa fa-fw fa-github"></i>
+	</a>
+</li>
+
+
+
+
+
+
+
+<li>
+	<a href="https://www.linkedin.com/in/szymonszeliga" title="Linkedin">
+		<i class="fa fa-fw fa-linkedin"></i>
+	</a>
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	    </ul>
+	</nav>
+</header>
+
+			<div class="content">
+				
+				<article>
+					<header>
+						<h1 class="title">Creating images</h1>
+					</header>
+				
+
+				<section class="post-content">
+					
+
+<h2 id="foreword">Foreword</h2>
+
+<p>Before we move forward with implementing a camera model, it would be prudent to have some sort of debugging tool. When writing a ray tracer, that tool is a rendered image.</p>
+
+<p>Go has a built in <a href="https://golang.org/pkg/image/">image</a> package that allows to easily create images and save them as files on the disk.</p>
+
+<p>The code for this post can be viewed <a href="https://github.com/Szeliga/goray/tree/03-creating-images">here</a></p>
+
+<h2 id="design">Design</h2>
+
+<p>The scene will be represented by a struct. Internally it will store the width and height of the desired image, as well as a pointer to the <code>image.RGBA</code>, form the <code>image</code> package.</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">type</span> Scene <span style="color: #0000aa">struct</span> {
+	Width, Height <span style="color: #00aaaa">int</span>
+	Img           *image.RGBA
+}
+</pre></div>
+
+<h3 id="initialization">Initialization</h3>
+
+<p>In order to initialize the scene, we need to initialize the <code>image.RGBA</code> with the given dimensions. In go this is done by creating an <code>image.Rect</code> struct and passing it to the <code>image.NewRGBA</code> function.</p>
+
+<p>The whole code required to initialize the scene will be done in the <code>NewScene</code> method. The method should accept two integers as arguments, that represent the width and height of the image:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> TestNewSceneReturnsANewScene(t *testing.T) {
+	scene := NewScene(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
+	rect := image.Rect(<span style="color: #009999">0</span>, <span style="color: #009999">0</span>, <span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
+	assert.Equal(t, <span style="color: #009999">4</span>, scene.Width, <span style="color: #aa5500">&quot;sets width of the scene&quot;</span>)
+	assert.Equal(t, <span style="color: #009999">4</span>, scene.Height, <span style="color: #aa5500">&quot;sets height of the scene&quot;</span>)
+	assert.True(t, assert.ObjectsAreEqualValues(rect, scene.Img.Bounds()),
+		<span style="color: #aa5500">&quot;creates an image.RGBA with proper bounds&quot;</span>)
+}
+
+<span style="color: #0000aa">func</span> NewScene(width <span style="color: #00aaaa">int</span>, height <span style="color: #00aaaa">int</span>) *Scene {
+	<span style="color: #0000aa">return</span> &amp;Scene{
+		Width:  width,
+		Height: height,
+		Img:    image.NewRGBA(image.Rect(<span style="color: #009999">0</span>, <span style="color: #009999">0</span>, width, height)),
+	}
+}
+</pre></div>
+
+<p>The <code>assert</code> library exposes some nifty helper functions, like <a href="https://godoc.org/github.com/stretchr/testify/assert#ObjectsAreEqualValues"><code>ObjectsAreEqualValues</code></a> which does a deep equality check of an object&rsquo;s values.</p>
+
+<h3 id="test-helpers">Test helpers</h3>
+
+<p>In order to test the following methods, I needed to write two helper functions to generate a new <code>image.RGBA</code> and set the pixels to a random color:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> generateImage(w, h <span style="color: #00aaaa">int</span>, pixelColor color.RGBA) *image.RGBA {
+	img := image.NewRGBA(image.Rect(<span style="color: #009999">0</span>, <span style="color: #009999">0</span>, <span style="color: #009999">4</span>, <span style="color: #009999">4</span>))
+	<span style="color: #0000aa">for</span> x := <span style="color: #009999">0</span>; x &lt; <span style="color: #009999">4</span>; x++ {
+		<span style="color: #0000aa">for</span> y := <span style="color: #009999">0</span>; y &lt; <span style="color: #009999">4</span>; y++ {
+			img.Set(x, y, pixelColor)
+		}
+	}
+	<span style="color: #0000aa">return</span> img
+}
+
+<span style="color: #0000aa">func</span> randomColor() color.RGBA {
+	rand := rand.New(rand.NewSource(<span style="color: #009999">99</span>))
+	<span style="color: #0000aa">return</span> color.RGBA{<span style="color: #00aaaa">uint8</span>(rand.Intn(<span style="color: #009999">255</span>)), <span style="color: #00aaaa">uint8</span>(rand.Intn(<span style="color: #009999">255</span>)), <span style="color: #00aaaa">uint8</span>(rand.Intn(<span style="color: #009999">255</span>)), <span style="color: #009999">255</span>}
+}
+</pre></div>
+
+<p>I use these functions to generate expected <code>image.RGBA</code> objects for <code>ObjectsAreEqualValues</code>.</p>
+
+<h3 id="traversing-the-image">Traversing the image</h3>
+
+<p>For each pixel of the image, I want to set a specific color. This can be done simply enough by a double <code>for</code> loop, but we can expose a convenience function on <code>Scene</code>, called <code>EachPixel</code>. Go allows us to specify functions as arguments for other functions. We will leverage this fact be requiring a single argument in <code>EachPixel</code> - a function with the following signature - <code>func(int, int) color.RGBA</code>. The two <code>int</code> values are the x and y coordinates of the image (which will be used later on for calculating a pixel in the image plane). The full implementation of the <code>EachPixel</code> function looks like this:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (s *Scene) EachPixel(colorFunction <span style="color: #0000aa">func</span>(<span style="color: #00aaaa">int</span>, <span style="color: #00aaaa">int</span>) color.RGBA) {
+	<span style="color: #0000aa">for</span> x := <span style="color: #009999">0</span>; x &lt; s.Width; x++ {
+		<span style="color: #0000aa">for</span> y := <span style="color: #009999">0</span>; y &lt; s.Height; y++ {
+			s.setPixel(x, y, colorFunction(x, y))
+		}
+	}
+}
+
+<span style="color: #0000aa">func</span> TestSceneEachPixelSetsEachPixelToTheProvidedFunctionReturn(t *testing.T) {
+	scene := NewScene(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
+	c := randomColor()
+
+	scene.EachPixel(<span style="color: #0000aa">func</span>(x, y <span style="color: #00aaaa">int</span>) color.RGBA { <span style="color: #0000aa">return</span> c })
+	img := generateImage(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>, c)
+	assert.True(t, assert.ObjectsAreEqualValues(img, scene.Img),
+		<span style="color: #aa5500">&quot;sets every pixel of the image to the provided values&quot;</span>)
+}
+</pre></div>
+
+<p>The <code>setPixel</code> function is just an adapter around Go&rsquo;s built-in <code>image.RGBA.Set</code>.</p>
+
+<h3 id="saving-the-image">Saving the image</h3>
+
+<p>Finally I want to save the image to a PNG file. As one might suspect, Go provides such a function in the <code>image/png</code> package, called <code>png.Encode</code>. I&rsquo;ve built an adapter around this function, that takes a filename, which it should save the image under.</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (s *Scene) Save(filename <span style="color: #00aaaa">string</span>) {
+	f, err := os.Create(filename)
+
+	<span style="color: #0000aa">if</span> err != <span style="color: #0000aa">nil</span> {
+		<span style="color: #00aaaa">panic</span>(err)
+	}
+	<span style="color: #0000aa">defer</span> f.Close()
+	png.Encode(f, s.Img)
+}
+
+<span style="color: #0000aa">func</span> TestSceneSavePanicsWhenFileCannotBePersisted(t *testing.T) {
+	scene := NewScene(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
+	c := randomColor()
+	scene.EachPixel(<span style="color: #0000aa">func</span>(x, y <span style="color: #00aaaa">int</span>) color.RGBA { <span style="color: #0000aa">return</span> c })
+	assert.Panics(t, <span style="color: #0000aa">func</span>() {
+		scene.Save(<span style="color: #aa5500">&quot;/etc/temp.png&quot;</span>)
+	}, <span style="color: #aa5500">&quot;panics when the file cannot be persisted&quot;</span>)
+}
+</pre></div>
+
+<p>Several interesting things happen in this code:</p>
+
+<ul>
+<li><code>os.Create(filename)</code> &mdash; the function has multiple returns; this is a common pattern for <a href="https://blog.golang.org/error-handling-and-go">error handling in Go</a>:
+
+<ul>
+<li><code>f</code> &mdash; the file descriptor</li>
+<li><code>err</code> &mdash; any error that may have happened during the file creation, for example insufficient privileges</li>
+</ul></li>
+<li><code>defer f.Close()</code> &mdash; the <a href="https://tour.golang.org/flowcontrol/12"><code>defer</code> keyword</a> delays execution of the passed code until the surrounding function returns; in this case, the file won&rsquo;t close until the <code>Save</code> function finishes executing it&rsquo;s commands</li>
+<li><code>assert.Panics</code> &mdash; another nice feature of the <code>assert</code> library, instead of taking expected/actual values of the assertion, it takes a function that is supposed to <code>panic</code> (raise an exception), if the function does <code>panic</code> it passes the test; this is similar to RSpec&rsquo;s <code>expect { subject }.to raise_error StandardError</code></li>
+</ul>
+
+<p>That&rsquo;s all regarding creating and saving images in Go. Next up, a basic camera model, stay tuned.</p>
+
+
+				<hr>
+
+				<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'goray-devblog';
+    var disqus_identifier = 'https:\/\/szeliga.github.io\/2016\/09\/02\/creating-images';
+    var disqus_title = 'Creating images';
+    var disqus_url = 'https:\/\/szeliga.github.io\/2016\/09\/02\/creating-images';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+				</section>
+
+			</article>
+			<footer class="site-footer">
+	<p class="text">&copy; 2016 - by Szymon Szeliga - Powered by <a href="//gohugo.io">Hugo</a> - Theme: <a href="//github.com/digitalcraftsman/hugo-type-theme">Type</a></p>
+</footer>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57222446-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+		</div>
+	</body>
+</html>
