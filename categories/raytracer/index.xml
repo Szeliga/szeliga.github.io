@@ -88,7 +88,16 @@ This type of notation allows for a verbose representation of the equations used 
 
 &lt;h3 id=&#34;adding-two-vectors&#34;&gt;Adding two vectors&lt;/h3&gt;
 
-&lt;p&gt;This operation is achieved by adding the corresponding coefficients of two vectors together:&lt;/p&gt;
+&lt;p&gt;This operation is achieved by adding the corresponding coefficients of two vectors together.&lt;/p&gt;
+
+&lt;p&gt;Geometrically it looks like this:
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/addition.png&#34; alt=&#34;Geometric definition of adding two vectors&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+&lt;/p&gt;
 &lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Add(b Vector) Vector {
   &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; Vector{
     X: a.X + b.X,
@@ -104,6 +113,15 @@ This type of notation allows for a verbose representation of the equations used 
 &lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;subtracting-two-vectors&#34;&gt;Subtracting two vectors&lt;/h3&gt;
+
+&lt;p&gt;Subtraction is similar to addition, with the difference that we add a negated vector:
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/subtraction.png&#34; alt=&#34;Geometric definition of subtracting two vectors&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+&lt;/p&gt;
 
 &lt;p&gt;Analogically to addition of two vectors, we subtract the corresponding coefficients of two vectors:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Sub(b Vector) Vector {
@@ -123,6 +141,14 @@ This type of notation allows for a verbose representation of the equations used 
 &lt;h3 id=&#34;multiplying-vector-by-scalar&#34;&gt;Multiplying vector by scalar&lt;/h3&gt;
 
 &lt;p&gt;Multiplying by a scalar can be interpreted as scaling the vector (modifying it&amp;rsquo;s length). This operation is also pretty straightforward, as we have to multiply each coefficient by the scalar:&lt;/p&gt;
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/scaling.png&#34; alt=&#34;Geometric definition of scaling a vector&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+
 &lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) MultiplyByScalar(s &lt;span style=&#34;color: #00aaaa&#34;&gt;float64&lt;/span&gt;) Vector {
   &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; Vector{
     X: a.X * s,
@@ -148,7 +174,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;p&gt;It&amp;rsquo;s algebraic definition is the following:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/equations/algebraic_dot_product.svg&#34; alt=&#34;Dot product algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/algebraic_dot_product.svg&#34; alt=&#34;Dot product algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -157,7 +183,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;p&gt;It&amp;rsquo;s a simple equation, we multiply corresponding coefficients of both vectors, and then sum those multiplications. But this definition isn&amp;rsquo;t of much use in context of the ray tracing algorithm. What we need here is the geometric definition:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/equations/geometric_dot_product.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/geometric_dot_product.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -171,7 +197,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;li&gt;&lt;p&gt;When the vectors are codirectional, then the angle between them is 0°. This means that the cosine is 1 and the dot product evaluates to:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/equations/geometric_dot_product_codirectional.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/geometric_dot_product_codirectional.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -203,7 +229,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;p&gt;As stated earlier, we denote the length of a vector A like this - &lt;code&gt;||A||&lt;/code&gt;. It&amp;rsquo;s algebraic definition is following:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/equations/vector_length.svg&#34; alt=&#34;Vector length algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/vector_length.svg&#34; alt=&#34;Vector length algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -242,7 +268,7 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
 &lt;p&gt;The cross product formula is somewhat hard to remember:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/equations/cross_product.svg&#34; alt=&#34;Cross product formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/cross_product.svg&#34; alt=&#34;Cross product formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -269,7 +295,7 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
 &lt;p&gt;Also called calculating a unit vector - versor:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/equations/vector_normalization.svg&#34; alt=&#34;Vector normalization formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/vector_normalization.svg&#34; alt=&#34;Vector normalization formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
