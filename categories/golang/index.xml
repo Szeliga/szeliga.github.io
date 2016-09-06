@@ -140,6 +140,44 @@
 &lt;li&gt;&lt;code&gt;assert.Panics&lt;/code&gt; &amp;mdash; another nice feature of the &lt;code&gt;assert&lt;/code&gt; library, instead of taking expected/actual values of the assertion, it takes a function that is supposed to &lt;code&gt;panic&lt;/code&gt; (raise an exception), if the function does &lt;code&gt;panic&lt;/code&gt; it passes the test; this is similar to RSpec&amp;rsquo;s &lt;code&gt;expect { subject }.to raise_error StandardError&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;h3 id=&#34;putting-it-all-together&#34;&gt;Putting it all together&lt;/h3&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a simple main function that fills the image with values based on the current pixel:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color: #0000aa&#34;&gt;import&lt;/span&gt; (
+	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;image/color&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+
+	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;github.com/szeliga/goray/engine&amp;quot;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; main() {
+	&lt;span style=&#34;color: #0000aa&#34;&gt;var&lt;/span&gt; width = &lt;span style=&#34;color: #009999&#34;&gt;200&lt;/span&gt;
+	&lt;span style=&#34;color: #0000aa&#34;&gt;var&lt;/span&gt; height = &lt;span style=&#34;color: #009999&#34;&gt;200&lt;/span&gt;
+	scene := engine.NewScene(width, height)
+	scene.EachPixel(&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt;(x, y &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;) color.RGBA {
+		&lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; color.RGBA{
+			&lt;span style=&#34;color: #00aaaa&#34;&gt;uint8&lt;/span&gt;(x * &lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt; / width),
+			&lt;span style=&#34;color: #00aaaa&#34;&gt;uint8&lt;/span&gt;(y * &lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt; / height),
+			&lt;span style=&#34;color: #009999&#34;&gt;100&lt;/span&gt;,
+			&lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt;,
+		}
+	})
+	scene.Save(fmt.Sprintf(&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;./renders/%d.png&amp;quot;&lt;/span&gt;, time.Now().Unix()))
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This code produces the following image:
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://szeliga.github.io/img/03-creating-images/image.png&#34; alt=&#34;Produced image&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
 &lt;p&gt;That&amp;rsquo;s all regarding creating and saving images in Go. Next up, a basic camera model, stay tuned.&lt;/p&gt;
 </description>
     </item>

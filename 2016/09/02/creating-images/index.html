@@ -256,6 +256,44 @@
 <li><code>assert.Panics</code> &mdash; another nice feature of the <code>assert</code> library, instead of taking expected/actual values of the assertion, it takes a function that is supposed to <code>panic</code> (raise an exception), if the function does <code>panic</code> it passes the test; this is similar to RSpec&rsquo;s <code>expect { subject }.to raise_error StandardError</code></li>
 </ul>
 
+<h3 id="putting-it-all-together">Putting it all together</h3>
+
+<p>Here&rsquo;s a simple main function that fills the image with values based on the current pixel:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">package</span> main
+
+<span style="color: #0000aa">import</span> (
+	<span style="color: #aa5500">&quot;fmt&quot;</span>
+	<span style="color: #aa5500">&quot;image/color&quot;</span>
+	<span style="color: #aa5500">&quot;time&quot;</span>
+
+	<span style="color: #aa5500">&quot;github.com/szeliga/goray/engine&quot;</span>
+)
+
+<span style="color: #0000aa">func</span> main() {
+	<span style="color: #0000aa">var</span> width = <span style="color: #009999">200</span>
+	<span style="color: #0000aa">var</span> height = <span style="color: #009999">200</span>
+	scene := engine.NewScene(width, height)
+	scene.EachPixel(<span style="color: #0000aa">func</span>(x, y <span style="color: #00aaaa">int</span>) color.RGBA {
+		<span style="color: #0000aa">return</span> color.RGBA{
+			<span style="color: #00aaaa">uint8</span>(x * <span style="color: #009999">255</span> / width),
+			<span style="color: #00aaaa">uint8</span>(y * <span style="color: #009999">255</span> / height),
+			<span style="color: #009999">100</span>,
+			<span style="color: #009999">255</span>,
+		}
+	})
+	scene.Save(fmt.Sprintf(<span style="color: #aa5500">&quot;./renders/%d.png&quot;</span>, time.Now().Unix()))
+}
+</pre></div>
+
+<p>This code produces the following image:
+<figure >
+    
+        <img src="https://szeliga.github.io/img/03-creating-images/image.png" alt="Produced image" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+    
+    
+</figure>
+</p>
+
 <p>That&rsquo;s all regarding creating and saving images in Go. Next up, a basic camera model, stay tuned.</p>
 
 
