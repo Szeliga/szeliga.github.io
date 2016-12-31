@@ -2,19 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Abouts on After Eight Coding</title>
-    <link>https://szeliga.github.io/about/</link>
+    <link>https://szeliga.co/about/index.xml</link>
     <description>Recent content in Abouts on After Eight Coding</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>by Szymon Szeliga - Powered by [Hugo](//gohugo.io) - Theme: [Type](//github.com/digitalcraftsman/hugo-type-theme)</copyright>
     <lastBuildDate>Wed, 20 Apr 2016 21:16:55 +0200</lastBuildDate>
-    <atom:link href="https://szeliga.github.io/about/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://szeliga.co/about/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>About</title>
-      <link>https://szeliga.github.io/about/</link>
+      <link>https://szeliga.co/about/</link>
       <pubDate>Wed, 20 Apr 2016 21:16:55 +0200</pubDate>
       
-      <guid>https://szeliga.github.io/about/</guid>
+      <guid>https://szeliga.co/about/</guid>
       <description>&lt;p&gt;My name is Szymon Szeliga, I work as a Senior Ruby on Rails dev in Netguru.
 This blog will contain posts about everything webdev-related, from Ruby and Rails, through databases (Postgres mostly), to exploring new languages and frameworks.&lt;/p&gt;
 </description>

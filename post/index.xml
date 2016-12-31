@@ -2,19 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on After Eight Coding</title>
-    <link>https://szeliga.github.io/post/</link>
+    <link>https://szeliga.co/post/index.xml</link>
     <description>Recent content in Posts on After Eight Coding</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>by Szymon Szeliga - Powered by [Hugo](//gohugo.io) - Theme: [Type](//github.com/digitalcraftsman/hugo-type-theme)</copyright>
     <lastBuildDate>Fri, 02 Sep 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://szeliga.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://szeliga.co/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Creating images</title>
-      <link>https://szeliga.github.io/2016/09/02/creating-images</link>
+      <link>https://szeliga.co/2016/09/02/creating-images</link>
       <pubDate>Fri, 02 Sep 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://szeliga.github.io/2016/09/02/creating-images</guid>
+      <guid>https://szeliga.co/2016/09/02/creating-images</guid>
       <description>
 
 &lt;h2 id=&#34;foreword&#34;&gt;Foreword&lt;/h2&gt;
@@ -28,104 +29,99 @@
 &lt;h2 id=&#34;design&#34;&gt;Design&lt;/h2&gt;
 
 &lt;p&gt;The scene will be represented by a struct. Internally it will store the width and height of the desired image, as well as a pointer to an instance of &lt;code&gt;image.RGBA&lt;/code&gt;.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;type&lt;/span&gt; Scene &lt;span style=&#34;color: #0000aa&#34;&gt;struct&lt;/span&gt; {
-	Width, Height &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;
+type Scene struct {
+	Width, Height int
 	Img           *image.RGBA
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;initialization&#34;&gt;Initialization&lt;/h3&gt;
 
 &lt;p&gt;In order to initialize the scene, we need to initialize the &lt;code&gt;image.RGBA&lt;/code&gt; with the given dimensions. In Go this is done by creating an &lt;code&gt;image.Rect&lt;/code&gt; struct and passing it to the &lt;code&gt;image.NewRGBA&lt;/code&gt; function.&lt;/p&gt;
 
 &lt;p&gt;The whole code required to initialize the scene will be done in the &lt;code&gt;NewScene&lt;/code&gt; function. The function should accept two integers as arguments, that represent the width and height of the image:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestNewSceneReturnsANewScene(t *testing.T) {
-	scene := NewScene(&lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;)
-	rect := image.Rect(&lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;)
-	assert.Equal(t, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, scene.Width, &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;sets width of the scene&amp;quot;&lt;/span&gt;)
-	assert.Equal(t, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, scene.Height, &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;sets height of the scene&amp;quot;&lt;/span&gt;)
+func TestNewSceneReturnsANewScene(t *testing.T) {
+	scene := NewScene(4, 4)
+	rect := image.Rect(0, 0, 4, 4)
+	assert.Equal(t, 4, scene.Width, &#34;sets width of the scene&#34;)
+	assert.Equal(t, 4, scene.Height, &#34;sets height of the scene&#34;)
 	assert.True(t, assert.ObjectsAreEqualValues(rect, scene.Img.Bounds()),
-		&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;creates an image.RGBA with proper bounds&amp;quot;&lt;/span&gt;)
+		&#34;creates an image.RGBA with proper bounds&#34;)
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; NewScene(width &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;, height &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;) *Scene {
-	&lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; &amp;amp;Scene{
+func NewScene(width int, height int) *Scene {
+	return &amp;Scene{
 		Width:  width,
 		Height: height,
-		Img:    image.NewRGBA(image.Rect(&lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;, width, height)),
+		Img:    image.NewRGBA(image.Rect(0, 0, width, height)),
 	}
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The &lt;code&gt;assert&lt;/code&gt; library exposes some nifty helper functions, like &lt;a href=&#34;https://godoc.org/github.com/stretchr/testify/assert#ObjectsAreEqualValues&#34;&gt;&lt;code&gt;ObjectsAreEqualValues&lt;/code&gt;&lt;/a&gt;, which does a deep equality check of an object&amp;rsquo;s values.&lt;/p&gt;
 
 &lt;h3 id=&#34;test-helpers&#34;&gt;Test helpers&lt;/h3&gt;
 
 &lt;p&gt;In order to test the following functions, I needed to write two helper functions to generate a new &lt;code&gt;image.RGBA&lt;/code&gt; and fill the image with a random color:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; generateImage(w, h &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;, pixelColor color.RGBA) *image.RGBA {
-	img := image.NewRGBA(image.Rect(&lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;))
-	&lt;span style=&#34;color: #0000aa&#34;&gt;for&lt;/span&gt; x := &lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;; x &amp;lt; &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;; x++ {
-		&lt;span style=&#34;color: #0000aa&#34;&gt;for&lt;/span&gt; y := &lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;; y &amp;lt; &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;; y++ {
+func generateImage(w, h int, pixelColor color.RGBA) *image.RGBA {
+	img := image.NewRGBA(image.Rect(0, 0, 4, 4))
+	for x := 0; x &lt; 4; x++ {
+		for y := 0; y &lt; 4; y++ {
 			img.Set(x, y, pixelColor)
 		}
 	}
-	&lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; img
+	return img
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; randomColor() color.RGBA {
+func randomColor() color.RGBA {
 	rand := rand.New(rand.NewSource(time.Now().Unix()))
-	&lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; color.RGBA{&lt;span style=&#34;color: #00aaaa&#34;&gt;uint8&lt;/span&gt;(rand.Intn(&lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt;)), &lt;span style=&#34;color: #00aaaa&#34;&gt;uint8&lt;/span&gt;(rand.Intn(&lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt;)), &lt;span style=&#34;color: #00aaaa&#34;&gt;uint8&lt;/span&gt;(rand.Intn(&lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt;)), &lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt;}
+	return color.RGBA{uint8(rand.Intn(255)), uint8(rand.Intn(255)), uint8(rand.Intn(255)), 255}
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I use these helpers to generate expected &lt;code&gt;image.RGBA&lt;/code&gt; objects for &lt;code&gt;ObjectsAreEqualValues&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h3 id=&#34;traversing-the-image&#34;&gt;Traversing the image&lt;/h3&gt;
 
 &lt;p&gt;For each pixel of the image, I want to set a specific color. This can be done simply enough by a double &lt;code&gt;for&lt;/code&gt; loop, but we can expose a convenience function on &lt;code&gt;Scene&lt;/code&gt;, called &lt;code&gt;EachPixel&lt;/code&gt;. Go allows us to specify functions as arguments for other functions. We will leverage this fact by requiring a single argument in &lt;code&gt;EachPixel&lt;/code&gt; &amp;mdash; a function with the following signature &lt;code&gt;func(int, int) color.RGBA&lt;/code&gt;. The two &lt;code&gt;int&lt;/code&gt; values are the &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; coordinates of the image (which will be used later on for calculating a pixel in the image plane). The full implementation of the &lt;code&gt;EachPixel&lt;/code&gt; function looks like this:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (s *Scene) EachPixel(colorFunction &lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt;(&lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;, &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;) color.RGBA) {
-	&lt;span style=&#34;color: #0000aa&#34;&gt;for&lt;/span&gt; x := &lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;; x &amp;lt; s.Width; x++ {
-		&lt;span style=&#34;color: #0000aa&#34;&gt;for&lt;/span&gt; y := &lt;span style=&#34;color: #009999&#34;&gt;0&lt;/span&gt;; y &amp;lt; s.Height; y++ {
+func (s *Scene) EachPixel(colorFunction func(int, int) color.RGBA) {
+	for x := 0; x &lt; s.Width; x++ {
+		for y := 0; y &lt; s.Height; y++ {
 			s.setPixel(x, y, colorFunction(x, y))
 		}
 	}
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestSceneEachPixelSetsEachPixelToTheProvidedFunctionReturn(t *testing.T) {
-	scene := NewScene(&lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;)
+func TestSceneEachPixelSetsEachPixelToTheProvidedFunctionReturn(t *testing.T) {
+	scene := NewScene(4, 4)
 	c := randomColor()
 
-	scene.EachPixel(&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt;(x, y &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;) color.RGBA { &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; c })
-	img := generateImage(&lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, c)
+	scene.EachPixel(func(x, y int) color.RGBA { return c })
+	img := generateImage(4, 4, c)
 	assert.True(t, assert.ObjectsAreEqualValues(img, scene.Img),
-		&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;sets every pixel of the image to the provided values&amp;quot;&lt;/span&gt;)
+		&#34;sets every pixel of the image to the provided values&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The &lt;code&gt;setPixel&lt;/code&gt; function is just an adapter for Go&amp;rsquo;s built-in &lt;code&gt;image.RGBA.Set&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h3 id=&#34;saving-the-image&#34;&gt;Saving the image&lt;/h3&gt;
 
 &lt;p&gt;Finally I want to save the image to a PNG file. As one might suspect, Go provides such a function in the &lt;code&gt;image/png&lt;/code&gt; package, called &lt;code&gt;png.Encode&lt;/code&gt;. Again, I&amp;rsquo;ve built an adapter for this function, that takes a filename, under which it should save the image.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (s *Scene) Save(filename &lt;span style=&#34;color: #00aaaa&#34;&gt;string&lt;/span&gt;) {
+func (s *Scene) Save(filename string) {
 	f, err := os.Create(filename)
 
-	&lt;span style=&#34;color: #0000aa&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #0000aa&#34;&gt;nil&lt;/span&gt; {
-		&lt;span style=&#34;color: #00aaaa&#34;&gt;panic&lt;/span&gt;(err)
+	if err != nil {
+		panic(err)
 	}
-	&lt;span style=&#34;color: #0000aa&#34;&gt;defer&lt;/span&gt; f.Close()
+	defer f.Close()
 	png.Encode(f, s.Img)
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestSceneSavePanicsWhenFileCannotBePersisted(t *testing.T) {
-	scene := NewScene(&lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;4&lt;/span&gt;)
+func TestSceneSavePanicsWhenFileCannotBePersisted(t *testing.T) {
+	scene := NewScene(4, 4)
 	c := randomColor()
-	scene.EachPixel(&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt;(x, y &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;) color.RGBA { &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; c })
-	assert.Panics(t, &lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt;() {
-		scene.Save(&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;/etc/temp.png&amp;quot;&lt;/span&gt;)
-	}, &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;panics when the file cannot be persisted&amp;quot;&lt;/span&gt;)
+	scene.EachPixel(func(x, y int) color.RGBA { return c })
+	assert.Panics(t, func() {
+		scene.Save(&#34;/etc/temp.png&#34;)
+	}, &#34;panics when the file cannot be persisted&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Several interesting things happen in this code:&lt;/p&gt;
 
@@ -143,36 +139,35 @@
 &lt;h3 id=&#34;putting-it-all-together&#34;&gt;Putting it all together&lt;/h3&gt;
 
 &lt;p&gt;Here&amp;rsquo;s a simple main function that fills the image with values based on the current pixel:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;package&lt;/span&gt; main
+package main
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;import&lt;/span&gt; (
-	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
-	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;image/color&amp;quot;&lt;/span&gt;
-	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+import (
+	&#34;fmt&#34;
+	&#34;image/color&#34;
+	&#34;time&#34;
 
-	&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;github.com/szeliga/goray/engine&amp;quot;&lt;/span&gt;
+	&#34;github.com/szeliga/goray/engine&#34;
 )
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; main() {
-	&lt;span style=&#34;color: #0000aa&#34;&gt;var&lt;/span&gt; width = &lt;span style=&#34;color: #009999&#34;&gt;200&lt;/span&gt;
-	&lt;span style=&#34;color: #0000aa&#34;&gt;var&lt;/span&gt; height = &lt;span style=&#34;color: #009999&#34;&gt;200&lt;/span&gt;
+func main() {
+	var width = 200
+	var height = 200
 	scene := engine.NewScene(width, height)
-	scene.EachPixel(&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt;(x, y &lt;span style=&#34;color: #00aaaa&#34;&gt;int&lt;/span&gt;) color.RGBA {
-		&lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; color.RGBA{
-			&lt;span style=&#34;color: #00aaaa&#34;&gt;uint8&lt;/span&gt;(x * &lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt; / width),
-			&lt;span style=&#34;color: #00aaaa&#34;&gt;uint8&lt;/span&gt;(y * &lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt; / height),
-			&lt;span style=&#34;color: #009999&#34;&gt;100&lt;/span&gt;,
-			&lt;span style=&#34;color: #009999&#34;&gt;255&lt;/span&gt;,
+	scene.EachPixel(func(x, y int) color.RGBA {
+		return color.RGBA{
+			uint8(x * 255 / width),
+			uint8(y * 255 / height),
+			100,
+			255,
 		}
 	})
-	scene.Save(fmt.Sprintf(&lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;./renders/%d.png&amp;quot;&lt;/span&gt;, time.Now().Unix()))
+	scene.Save(fmt.Sprintf(&#34;./renders/%d.png&#34;, time.Now().Unix()))
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This code produces the following image:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/03-creating-images/image.png&#34; alt=&#34;Produced image&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/03-creating-images/image.png&#34; alt=&#34;Produced image&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -184,10 +179,10 @@
     
     <item>
       <title>Vector operations</title>
-      <link>https://szeliga.github.io/2016/05/01/vector-operations</link>
+      <link>https://szeliga.co/2016/05/01/vector-operations</link>
       <pubDate>Sun, 01 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://szeliga.github.io/2016/05/01/vector-operations</guid>
+      <guid>https://szeliga.co/2016/05/01/vector-operations</guid>
       <description>
 
 &lt;h2 id=&#34;foreword&#34;&gt;Foreword&lt;/h2&gt;
@@ -203,15 +198,14 @@
 &lt;p&gt;First thing I need to do, is define how vectors will be represented in the code. I&amp;rsquo;m coming from a highly object oriented language (ruby), so naturally I picked a thing that ressembles objects the most - &lt;code&gt;struct&lt;/code&gt; (this may not be the Go way, so if You have any other propositions, please ping me).&lt;/p&gt;
 
 &lt;p&gt;So let&amp;rsquo;s define a struct that will represent a 3 dimensional vector with coordinates &lt;code&gt;(x, y, z)&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;package&lt;/span&gt; core
+package core
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;math&amp;quot;&lt;/span&gt;
+import &#34;math&#34;
 
-&lt;span style=&#34;color: #aaaaaa; font-style: italic&#34;&gt;// Vector - struct holding X Y Z values of a 3D vector&lt;/span&gt;
-&lt;span style=&#34;color: #0000aa&#34;&gt;type&lt;/span&gt; Vector &lt;span style=&#34;color: #0000aa&#34;&gt;struct&lt;/span&gt; {
-  X, Y, Z &lt;span style=&#34;color: #00aaaa&#34;&gt;float64&lt;/span&gt;
+// Vector - struct holding X Y Z values of a 3D vector
+type Vector struct {
+  X, Y, Z float64
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;em&gt;Note that the struct&amp;rsquo;s name and all of the coordinates are written in capital letters. That&amp;rsquo;s because in Go, only stuff that&amp;rsquo;s written in capital letters gets exported when your package is imported somewhere. Lowercase functions, structs, etc. are available only inside the package. If you want some more information about this, visit 
 
@@ -233,24 +227,22 @@ Methods are plain Go functions, but they are defined with a receiver that comes 
 &lt;ul&gt;
 &lt;li&gt;Pointer receiver&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;  &lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a *Vector) Add(b Vector) Vector {
+  func (a *Vector) Add(b Vector) Vector {
     a.X += b.X
     a.Y += b.Y
     a.Z += b.Z
-    &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; a
+    return a
   }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Value receiver&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;  &lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Add(b Vector) Vector {
+  func (a Vector) Add(b Vector) Vector {
     a.X += b.X
     a.Y += b.Y
     a.Z += b.Z
-    &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; a
+    return a
   }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The core difference between these two is that, the one that is defined on a pointer receiver, will mutate the actual object it was called on. Analogically a method called on a value receiver will not mutate the receiver, because it will operate on a copy of the original receiver.&lt;/p&gt;
 
@@ -266,50 +258,48 @@ This type of notation allows for a verbose representation of the equations used 
 &lt;p&gt;Geometrically it looks like this:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/addition.png&#34; alt=&#34;Geometric definition of adding two vectors&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/addition.png&#34; alt=&#34;Geometric definition of adding two vectors&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
 &lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Add(b Vector) Vector {
-  &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; Vector{
+func (a Vector) Add(b Vector) Vector {
+  return Vector{
     X: a.X + b.X,
     Y: a.Y + b.Y,
     Z: a.Z + b.Z,
   }
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestAdd(t *testing.T) {
-  result := Vector{&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;}.Add(Vector{&lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;})
-  assert.Equal(t, Vector{&lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;}, result, &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;should add correctly&amp;quot;&lt;/span&gt;)
+func TestAdd(t *testing.T) {
+  result := Vector{1., 1., 1.}.Add(Vector{2., 2., 2.})
+  assert.Equal(t, Vector{3., 3., 3.}, result, &#34;should add correctly&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;subtracting-two-vectors&#34;&gt;Subtracting two vectors&lt;/h3&gt;
 
 &lt;p&gt;Subtraction is similar to addition, with the difference that we add a negated vector:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/subtraction.png&#34; alt=&#34;Geometric definition of subtracting two vectors&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/subtraction.png&#34; alt=&#34;Geometric definition of subtracting two vectors&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
 &lt;/p&gt;
 
 &lt;p&gt;Analogically to addition of two vectors, we subtract the corresponding coefficients of two vectors:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Sub(b Vector) Vector {
-  &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; Vector{
+func (a Vector) Sub(b Vector) Vector {
+  return Vector{
     X: a.X - b.X,
     Y: a.Y - b.Y,
     Z: a.Z - b.Z,
   }
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestSub(t *testing.T) {
-  result := Vector{&lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;}.Sub(Vector{&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;})
-  assert.Equal(t, Vector{&lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;}, result, &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;should subtract correcly&amp;quot;&lt;/span&gt;)
+func TestSub(t *testing.T) {
+  result := Vector{3., 3., 3.}.Sub(Vector{1., 1., 1.})
+  assert.Equal(t, Vector{2., 2., 2.}, result, &#34;should subtract correcly&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;multiplying-vector-by-scalar&#34;&gt;Multiplying vector by scalar&lt;/h3&gt;
 
@@ -317,25 +307,24 @@ This type of notation allows for a verbose representation of the equations used 
 
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/scaling.png&#34; alt=&#34;Geometric definition of scaling a vector&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/scaling.png&#34; alt=&#34;Geometric definition of scaling a vector&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) MultiplyByScalar(s &lt;span style=&#34;color: #00aaaa&#34;&gt;float64&lt;/span&gt;) Vector {
-  &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; Vector{
+func (a Vector) MultiplyByScalar(s float64) Vector {
+  return Vector{
     X: a.X * s,
     Y: a.Y * s,
     Z: a.Z * s,
   }
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestMultiplyByScalar(t *testing.T) {
-  result := Vector{&lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;}.MultiplyByScalar(&lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;)
-  assert.Equal(t, Vector{&lt;span style=&#34;color: #009999&#34;&gt;6.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;6.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;6.&lt;/span&gt;}, result,
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;should multiply each component by given scalar&amp;quot;&lt;/span&gt;)
+func TestMultiplyByScalar(t *testing.T) {
+  result := Vector{3., 3., 3.}.MultiplyByScalar(2.)
+  assert.Equal(t, Vector{6., 6., 6.}, result,
+    &#34;should multiply each component by given scalar&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;em&gt;As a bonus, we also get division by a scalar, by multiplying by &lt;code&gt;1/s&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
 
@@ -347,7 +336,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;p&gt;It&amp;rsquo;s algebraic definition is the following:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/algebraic_dot_product.svg&#34; alt=&#34;Dot product algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/equations/algebraic_dot_product.svg&#34; alt=&#34;Dot product algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -356,7 +345,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;p&gt;It&amp;rsquo;s a simple equation, we multiply corresponding coefficients of both vectors, and then sum those multiplications. But this definition isn&amp;rsquo;t of much use in context of the ray tracing algorithm. What we need here is the geometric definition:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/geometric_dot_product.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/equations/geometric_dot_product.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -370,7 +359,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;li&gt;&lt;p&gt;When the vectors are codirectional, then the angle between them is 0°. This means that the cosine is 1 and the dot product evaluates to:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/geometric_dot_product_codirectional.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/equations/geometric_dot_product_codirectional.svg&#34; alt=&#34;Dot product geometric definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -380,20 +369,19 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;p&gt;This two cases give us a way to determine if two rays are orthogonal or codirectional, which has a huge meaning when evaluating materials of objects.&lt;/p&gt;
 
 &lt;p&gt;With the theoretical stuff out of the way, let&amp;rsquo;s proceed with the implementation:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Dot(b Vector) &lt;span style=&#34;color: #00aaaa&#34;&gt;float64&lt;/span&gt; {
-  &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; a.X*b.X + a.Y*b.Y + a.Z*b.Z
+func (a Vector) Dot(b Vector) float64 {
+  return a.X*b.X + a.Y*b.Y + a.Z*b.Z
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestDotProductOfTwoPerpendicularVectors(t *testing.T) {
-  result := Vector{&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Dot(Vector{&lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;})
-  assert.Equal(t, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, result, &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;dot product of two perpendicular vectors is 0&amp;quot;&lt;/span&gt;)
+func TestDotProductOfTwoPerpendicularVectors(t *testing.T) {
+  result := Vector{1., 0., 0.}.Dot(Vector{0., 1., 0.})
+  assert.Equal(t, 0., result, &#34;dot product of two perpendicular vectors is 0&#34;)
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestDotProductOfTwoParallelVectors(t *testing.T) {
-  result := Vector{&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Dot(Vector{&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;})
-  assert.Equal(t, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, result, &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;dot product of two parallel vectors is 1&amp;quot;&lt;/span&gt;)
+func TestDotProductOfTwoParallelVectors(t *testing.T) {
+  result := Vector{1., 0., 0.}.Dot(Vector{1., 0., 0.})
+  assert.Equal(t, 1., result, &#34;dot product of two parallel vectors is 1&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Pretty simple, eh?&lt;/p&gt;
 
@@ -402,7 +390,7 @@ This operation is particurarly important in the context of the ray tracing algor
 &lt;p&gt;As stated earlier, we denote the length of a vector A like this - &lt;code&gt;||A||&lt;/code&gt;. It&amp;rsquo;s algebraic definition is following:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/vector_length.svg&#34; alt=&#34;Vector length algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/equations/vector_length.svg&#34; alt=&#34;Vector length algebraic definition&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -410,19 +398,18 @@ This operation is particurarly important in the context of the ray tracing algor
 
 &lt;p&gt;As you can see, it&amp;rsquo;s basically a dot product of a vector with itself, under a square root.
 So we can use the already implemented &lt;code&gt;Dot&lt;/code&gt; method, to implement this one:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Length() &lt;span style=&#34;color: #00aaaa&#34;&gt;float64&lt;/span&gt; {
-  &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; math.Sqrt(a.Dot(a))
+func (a Vector) Length() float64 {
+  return math.Sqrt(a.Dot(a))
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestLength(t *testing.T) {
-  assert.Equal(t, &lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, Vector{&lt;span style=&#34;color: #009999&#34;&gt;3.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Length(),
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;calculates the length(magnitude) correctly for Vector{3., 0., 0.}&amp;quot;&lt;/span&gt;)
-  assert.Equal(t, &lt;span style=&#34;color: #009999&#34;&gt;6.&lt;/span&gt;, Vector{&lt;span style=&#34;color: #009999&#34;&gt;6.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Length(),
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;calculates the length(magnitude) correctly for Vector{6., 0., 0.}&amp;quot;&lt;/span&gt;)
-  assert.Equal(t, &lt;span style=&#34;color: #009999&#34;&gt;6.324555320336759&lt;/span&gt;, Vector{&lt;span style=&#34;color: #009999&#34;&gt;6.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;2.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Length(),
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;calculates the length(magnitude) correctly for Vector{6., 2., 0.}&amp;quot;&lt;/span&gt;)
+func TestLength(t *testing.T) {
+  assert.Equal(t, 3., Vector{3., 0., 0.}.Length(),
+    &#34;calculates the length(magnitude) correctly for Vector{3., 0., 0.}&#34;)
+  assert.Equal(t, 6., Vector{6., 0., 0.}.Length(),
+    &#34;calculates the length(magnitude) correctly for Vector{6., 0., 0.}&#34;)
+  assert.Equal(t, 6.324555320336759, Vector{6., 2., 0.}.Length(),
+    &#34;calculates the length(magnitude) correctly for Vector{6., 2., 0.}&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;cross-product-of-two-vectors&#34;&gt;Cross product of two vectors&lt;/h3&gt;
 
@@ -432,7 +419,7 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
 &lt;p&gt;The cross product can be also used for calculating a surface normal (the surface that is defined by the two vectors).
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/cross_product.png&#34; alt=&#34;Cross product&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/cross_product.png&#34; alt=&#34;Cross product&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
@@ -441,53 +428,51 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
 &lt;p&gt;The cross product formula is somewhat hard to remember:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/cross_product.svg&#34; alt=&#34;Cross product formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/equations/cross_product.svg&#34; alt=&#34;Cross product formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
 &lt;/p&gt;
 
 &lt;p&gt;The implementation looks like this:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Cross(b Vector) Vector {
-  &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; Vector{
+func (a Vector) Cross(b Vector) Vector {
+  return Vector{
     X: a.Y*b.Z - a.Z*b.Y,
     Y: a.Z*b.X - a.X*b.Z,
     Z: a.X*b.Y - a.Y*b.X,
   }
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestCrossProduct(t *testing.T) {
-  result := Vector{&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Cross(Vector{&lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;})
-  assert.Equal(t, Vector{&lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;}, result,
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;cross product returns a vector perpendicular to the other two&amp;quot;&lt;/span&gt;)
+func TestCrossProduct(t *testing.T) {
+  result := Vector{1., 0., 0.}.Cross(Vector{0., 1., 0.})
+  assert.Equal(t, Vector{0., 0., 1.}, result,
+    &#34;cross product returns a vector perpendicular to the other two&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;normalizing-a-vector&#34;&gt;Normalizing a vector&lt;/h3&gt;
 
 &lt;p&gt;Also called calculating a unit vector - versor:
 &lt;figure &gt;
     
-        &lt;img src=&#34;https://szeliga.github.io/img/02-vector-operations/equations/vector_normalization.svg&#34; alt=&#34;Vector normalization formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
+        &lt;img src=&#34;https://szeliga.co/img/02-vector-operations/equations/vector_normalization.svg&#34; alt=&#34;Vector normalization formula&#34; style=&#34;width: auto; height: auto; margin: 0 auto; display: block;&#34; /&gt;
     
     
 &lt;/figure&gt;
 &lt;/p&gt;
 
 &lt;p&gt;All we have to do, is divide (multiply by &lt;code&gt;1 / x&lt;/code&gt;) each of the vectors components by the length of the vector:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; (a Vector) Normalize() Vector {
-  &lt;span style=&#34;color: #0000aa&#34;&gt;return&lt;/span&gt; a.MultiplyByScalar(&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt; / a.Length())
+func (a Vector) Normalize() Vector {
+  return a.MultiplyByScalar(1. / a.Length())
 }
 
-&lt;span style=&#34;color: #0000aa&#34;&gt;func&lt;/span&gt; TestNormalize(t *testing.T) {
-  assert.Equal(t, Vector{&lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}, Vector{&lt;span style=&#34;color: #009999&#34;&gt;10.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Normalize(),
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;returns a unit vector (versor) from the given vector&amp;quot;&lt;/span&gt;)
-  assert.Equal(t, Vector{&lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}, Vector{&lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;10.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;}.Normalize(),
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;returns a unit vector (versor) from the given vector&amp;quot;&lt;/span&gt;)
-  assert.Equal(t, Vector{&lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;1.&lt;/span&gt;}, Vector{&lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;0.&lt;/span&gt;, &lt;span style=&#34;color: #009999&#34;&gt;10.&lt;/span&gt;}.Normalize(),
-    &lt;span style=&#34;color: #aa5500&#34;&gt;&amp;quot;returns a unit vector (versor) from the given vector&amp;quot;&lt;/span&gt;)
+func TestNormalize(t *testing.T) {
+  assert.Equal(t, Vector{1., 0., 0.}, Vector{10., 0., 0.}.Normalize(),
+    &#34;returns a unit vector (versor) from the given vector&#34;)
+  assert.Equal(t, Vector{0., 1., 0.}, Vector{0., 10., 0.}.Normalize(),
+    &#34;returns a unit vector (versor) from the given vector&#34;)
+  assert.Equal(t, Vector{0., 0., 1.}, Vector{0., 0., 10.}.Normalize(),
+    &#34;returns a unit vector (versor) from the given vector&#34;)
 }
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
@@ -497,10 +482,10 @@ Additionally this operation is defined in &lt;strong&gt;R&lt;sup&gt;3&lt;/sup&gt
     
     <item>
       <title>Getting started with Golang</title>
-      <link>https://szeliga.github.io/2016/04/20/getting-started-with-golang</link>
+      <link>https://szeliga.co/2016/04/20/getting-started-with-golang</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>https://szeliga.github.io/2016/04/20/getting-started-with-golang</guid>
+      <guid>https://szeliga.co/2016/04/20/getting-started-with-golang</guid>
       <description>&lt;p&gt;I was always thrilled about learning new stuff, and recently that new stuff happened to be Go.
 Why Go? I was hesitating between Rust, Elixir and Go. After some googling I found out that Go is the fastest of the three and the most mature one.&lt;/p&gt;
 

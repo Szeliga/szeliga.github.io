@@ -2,28 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://szeliga.github.io/</loc>
+    <loc>https://szeliga.co/2016/09/02/creating-images</loc>
     <lastmod>2016-09-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://szeliga.github.io/2016/09/02/creating-images</loc>
-    <lastmod>2016-09-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://szeliga.github.io/2016/05/01/vector-operations</loc>
+    <loc>https://szeliga.co/2016/05/01/vector-operations</loc>
     <lastmod>2016-05-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://szeliga.github.io/about/</loc>
+    <loc>https://szeliga.co/about/</loc>
     <lastmod>2016-04-20T21:16:55+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://szeliga.github.io/2016/04/20/getting-started-with-golang</loc>
+    <loc>https://szeliga.co/2016/04/20/getting-started-with-golang</loc>
     <lastmod>2016-04-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://szeliga.co/about/</loc>
+    <lastmod>2016-04-20T21:16:55+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://szeliga.co/</loc>
+    <lastmod>2016-09-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://szeliga.co/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://szeliga.co/categories/golang/</loc>
+    <lastmod>2016-09-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://szeliga.co/post/</loc>
+    <lastmod>2016-09-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://szeliga.co/categories/raytracer/</loc>
+    <lastmod>2016-09-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
 </urlset>

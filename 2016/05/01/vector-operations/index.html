@@ -6,15 +6,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-Frame-Options" content="sameorigin">
   <meta name="google-site-verification" content="U1ky_ZA2WI301xUfkjD8a7anISszyvMOHFtQNduC0qY" />
+  <link rel="canonical" href="https://szeliga.co/2016/05/01/vector-operations">
 	<meta name="author" content="Szymon Szeliga">
 	<meta name="description" content="A development journal about writting a ray tracer in Go">
-	<meta name="generator" content="Hugo 0.16" />
+	<meta name="generator" content="Hugo 0.18.1" />
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="https://szeliga.github.io/css/main.css">
+	<link rel="stylesheet" href="https://szeliga.co/css/main.css">
 
 	<!--Favicon-->
-	<link rel="shortcut icon" href="https://szeliga.github.io/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="https://szeliga.co/favicon.ico" type="image/x-icon">
 
 	<!-- RSS -->
 	
@@ -31,13 +32,13 @@
 		<body>
 			<header class="site-header">
 	<div class="branding">
-		<a href="https://szeliga.github.io/">
+		<a href="https://szeliga.co/">
 		
 			<img class="avatar" src="https://www.gravatar.com/avatar/9f51c29157a82507ca44f5f9617ba26c?s=100&d=identicon" alt=""/>
 		
 		</a>
 		<h1 class="site-title">
-			<a href="https://szeliga.github.io/">After Eight Coding</a>
+			<a href="https://szeliga.co/">After Eight Coding</a>
 		</h1>
 	</div>
 	<nav class="site-nav">
@@ -48,7 +49,7 @@
 
 	      	
 <li>
-	<a href="https://szeliga.github.io/" title="">
+	<a href="https://szeliga.co/" title="">
 		<i class="fa fa-fw fa-home"></i>
 	</a>
 </li>
@@ -56,7 +57,7 @@
 
 
 <li>
-	<a href="https://szeliga.github.io/index.xml" title="Subcribe">
+	<a href="https://szeliga.co/index.xml" title="Subcribe">
 		<i class="fa fa-fw fa-rss"></i>
 	</a>
 </li>
@@ -146,15 +147,14 @@
 <p>First thing I need to do, is define how vectors will be represented in the code. I&rsquo;m coming from a highly object oriented language (ruby), so naturally I picked a thing that ressembles objects the most - <code>struct</code> (this may not be the Go way, so if You have any other propositions, please ping me).</p>
 
 <p>So let&rsquo;s define a struct that will represent a 3 dimensional vector with coordinates <code>(x, y, z)</code>:</p>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">package</span> core
+package core
 
-<span style="color: #0000aa">import</span> <span style="color: #aa5500">&quot;math&quot;</span>
+import "math"
 
-<span style="color: #aaaaaa; font-style: italic">// Vector - struct holding X Y Z values of a 3D vector</span>
-<span style="color: #0000aa">type</span> Vector <span style="color: #0000aa">struct</span> {
-  X, Y, Z <span style="color: #00aaaa">float64</span>
+// Vector - struct holding X Y Z values of a 3D vector
+type Vector struct {
+  X, Y, Z float64
 }
-</pre></div>
 
 <p><em>Note that the struct&rsquo;s name and all of the coordinates are written in capital letters. That&rsquo;s because in Go, only stuff that&rsquo;s written in capital letters gets exported when your package is imported somewhere. Lowercase functions, structs, etc. are available only inside the package. If you want some more information about this, visit 
 
@@ -176,24 +176,22 @@ Methods are plain Go functions, but they are defined with a receiver that comes 
 <ul>
 <li>Pointer receiver</li>
 </ul>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span>  <span style="color: #0000aa">func</span> (a *Vector) Add(b Vector) Vector {
+  func (a *Vector) Add(b Vector) Vector {
     a.X += b.X
     a.Y += b.Y
     a.Z += b.Z
-    <span style="color: #0000aa">return</span> a
+    return a
   }
-</pre></div>
 
 <ul>
 <li>Value receiver</li>
 </ul>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span>  <span style="color: #0000aa">func</span> (a Vector) Add(b Vector) Vector {
+  func (a Vector) Add(b Vector) Vector {
     a.X += b.X
     a.Y += b.Y
     a.Z += b.Z
-    <span style="color: #0000aa">return</span> a
+    return a
   }
-</pre></div>
 
 <p>The core difference between these two is that, the one that is defined on a pointer receiver, will mutate the actual object it was called on. Analogically a method called on a value receiver will not mutate the receiver, because it will operate on a copy of the original receiver.</p>
 
@@ -209,50 +207,48 @@ This type of notation allows for a verbose representation of the equations used 
 <p>Geometrically it looks like this:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/addition.png" alt="Geometric definition of adding two vectors" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/addition.png" alt="Geometric definition of adding two vectors" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
 </p>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Add(b Vector) Vector {
-  <span style="color: #0000aa">return</span> Vector{
+func (a Vector) Add(b Vector) Vector {
+  return Vector{
     X: a.X + b.X,
     Y: a.Y + b.Y,
     Z: a.Z + b.Z,
   }
 }
 
-<span style="color: #0000aa">func</span> TestAdd(t *testing.T) {
-  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>}.Add(Vector{<span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>})
-  assert.Equal(t, Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>}, result, <span style="color: #aa5500">&quot;should add correctly&quot;</span>)
+func TestAdd(t *testing.T) {
+  result := Vector{1., 1., 1.}.Add(Vector{2., 2., 2.})
+  assert.Equal(t, Vector{3., 3., 3.}, result, "should add correctly")
 }
-</pre></div>
 
 <h3 id="subtracting-two-vectors">Subtracting two vectors</h3>
 
 <p>Subtraction is similar to addition, with the difference that we add a negated vector:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/subtraction.png" alt="Geometric definition of subtracting two vectors" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/subtraction.png" alt="Geometric definition of subtracting two vectors" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
 </p>
 
 <p>Analogically to addition of two vectors, we subtract the corresponding coefficients of two vectors:</p>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Sub(b Vector) Vector {
-  <span style="color: #0000aa">return</span> Vector{
+func (a Vector) Sub(b Vector) Vector {
+  return Vector{
     X: a.X - b.X,
     Y: a.Y - b.Y,
     Z: a.Z - b.Z,
   }
 }
 
-<span style="color: #0000aa">func</span> TestSub(t *testing.T) {
-  result := Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>}.Sub(Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>})
-  assert.Equal(t, Vector{<span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>}, result, <span style="color: #aa5500">&quot;should subtract correcly&quot;</span>)
+func TestSub(t *testing.T) {
+  result := Vector{3., 3., 3.}.Sub(Vector{1., 1., 1.})
+  assert.Equal(t, Vector{2., 2., 2.}, result, "should subtract correcly")
 }
-</pre></div>
 
 <h3 id="multiplying-vector-by-scalar">Multiplying vector by scalar</h3>
 
@@ -260,25 +256,24 @@ This type of notation allows for a verbose representation of the equations used 
 
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/scaling.png" alt="Geometric definition of scaling a vector" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/scaling.png" alt="Geometric definition of scaling a vector" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
 
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) MultiplyByScalar(s <span style="color: #00aaaa">float64</span>) Vector {
-  <span style="color: #0000aa">return</span> Vector{
+func (a Vector) MultiplyByScalar(s float64) Vector {
+  return Vector{
     X: a.X * s,
     Y: a.Y * s,
     Z: a.Z * s,
   }
 }
 
-<span style="color: #0000aa">func</span> TestMultiplyByScalar(t *testing.T) {
-  result := Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>}.MultiplyByScalar(<span style="color: #009999">2.</span>)
-  assert.Equal(t, Vector{<span style="color: #009999">6.</span>, <span style="color: #009999">6.</span>, <span style="color: #009999">6.</span>}, result,
-    <span style="color: #aa5500">&quot;should multiply each component by given scalar&quot;</span>)
+func TestMultiplyByScalar(t *testing.T) {
+  result := Vector{3., 3., 3.}.MultiplyByScalar(2.)
+  assert.Equal(t, Vector{6., 6., 6.}, result,
+    "should multiply each component by given scalar")
 }
-</pre></div>
 
 <p><em>As a bonus, we also get division by a scalar, by multiplying by <code>1/s</code></em></p>
 
@@ -290,7 +285,7 @@ This operation is particurarly important in the context of the ray tracing algor
 <p>It&rsquo;s algebraic definition is the following:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/equations/algebraic_dot_product.svg" alt="Dot product algebraic definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/equations/algebraic_dot_product.svg" alt="Dot product algebraic definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
@@ -299,7 +294,7 @@ This operation is particurarly important in the context of the ray tracing algor
 <p>It&rsquo;s a simple equation, we multiply corresponding coefficients of both vectors, and then sum those multiplications. But this definition isn&rsquo;t of much use in context of the ray tracing algorithm. What we need here is the geometric definition:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/equations/geometric_dot_product.svg" alt="Dot product geometric definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/equations/geometric_dot_product.svg" alt="Dot product geometric definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
@@ -313,7 +308,7 @@ This operation is particurarly important in the context of the ray tracing algor
 <li><p>When the vectors are codirectional, then the angle between them is 0°. This means that the cosine is 1 and the dot product evaluates to:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/equations/geometric_dot_product_codirectional.svg" alt="Dot product geometric definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/equations/geometric_dot_product_codirectional.svg" alt="Dot product geometric definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
@@ -323,20 +318,19 @@ This operation is particurarly important in the context of the ray tracing algor
 <p>This two cases give us a way to determine if two rays are orthogonal or codirectional, which has a huge meaning when evaluating materials of objects.</p>
 
 <p>With the theoretical stuff out of the way, let&rsquo;s proceed with the implementation:</p>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Dot(b Vector) <span style="color: #00aaaa">float64</span> {
-  <span style="color: #0000aa">return</span> a.X*b.X + a.Y*b.Y + a.Z*b.Z
+func (a Vector) Dot(b Vector) float64 {
+  return a.X*b.X + a.Y*b.Y + a.Z*b.Z
 }
 
-<span style="color: #0000aa">func</span> TestDotProductOfTwoPerpendicularVectors(t *testing.T) {
-  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Dot(Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>})
-  assert.Equal(t, <span style="color: #009999">0.</span>, result, <span style="color: #aa5500">&quot;dot product of two perpendicular vectors is 0&quot;</span>)
+func TestDotProductOfTwoPerpendicularVectors(t *testing.T) {
+  result := Vector{1., 0., 0.}.Dot(Vector{0., 1., 0.})
+  assert.Equal(t, 0., result, "dot product of two perpendicular vectors is 0")
 }
 
-<span style="color: #0000aa">func</span> TestDotProductOfTwoParallelVectors(t *testing.T) {
-  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Dot(Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>})
-  assert.Equal(t, <span style="color: #009999">1.</span>, result, <span style="color: #aa5500">&quot;dot product of two parallel vectors is 1&quot;</span>)
+func TestDotProductOfTwoParallelVectors(t *testing.T) {
+  result := Vector{1., 0., 0.}.Dot(Vector{1., 0., 0.})
+  assert.Equal(t, 1., result, "dot product of two parallel vectors is 1")
 }
-</pre></div>
 
 <p>Pretty simple, eh?</p>
 
@@ -345,7 +339,7 @@ This operation is particurarly important in the context of the ray tracing algor
 <p>As stated earlier, we denote the length of a vector A like this - <code>||A||</code>. It&rsquo;s algebraic definition is following:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/equations/vector_length.svg" alt="Vector length algebraic definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/equations/vector_length.svg" alt="Vector length algebraic definition" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
@@ -353,19 +347,18 @@ This operation is particurarly important in the context of the ray tracing algor
 
 <p>As you can see, it&rsquo;s basically a dot product of a vector with itself, under a square root.
 So we can use the already implemented <code>Dot</code> method, to implement this one:</p>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Length() <span style="color: #00aaaa">float64</span> {
-  <span style="color: #0000aa">return</span> math.Sqrt(a.Dot(a))
+func (a Vector) Length() float64 {
+  return math.Sqrt(a.Dot(a))
 }
 
-<span style="color: #0000aa">func</span> TestLength(t *testing.T) {
-  assert.Equal(t, <span style="color: #009999">3.</span>, Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Length(),
-    <span style="color: #aa5500">&quot;calculates the length(magnitude) correctly for Vector{3., 0., 0.}&quot;</span>)
-  assert.Equal(t, <span style="color: #009999">6.</span>, Vector{<span style="color: #009999">6.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Length(),
-    <span style="color: #aa5500">&quot;calculates the length(magnitude) correctly for Vector{6., 0., 0.}&quot;</span>)
-  assert.Equal(t, <span style="color: #009999">6.324555320336759</span>, Vector{<span style="color: #009999">6.</span>, <span style="color: #009999">2.</span>, <span style="color: #009999">0.</span>}.Length(),
-    <span style="color: #aa5500">&quot;calculates the length(magnitude) correctly for Vector{6., 2., 0.}&quot;</span>)
+func TestLength(t *testing.T) {
+  assert.Equal(t, 3., Vector{3., 0., 0.}.Length(),
+    "calculates the length(magnitude) correctly for Vector{3., 0., 0.}")
+  assert.Equal(t, 6., Vector{6., 0., 0.}.Length(),
+    "calculates the length(magnitude) correctly for Vector{6., 0., 0.}")
+  assert.Equal(t, 6.324555320336759, Vector{6., 2., 0.}.Length(),
+    "calculates the length(magnitude) correctly for Vector{6., 2., 0.}")
 }
-</pre></div>
 
 <h3 id="cross-product-of-two-vectors">Cross product of two vectors</h3>
 
@@ -375,7 +368,7 @@ Additionally this operation is defined in <strong>R<sup>3</sup></strong>.</p>
 <p>The cross product can be also used for calculating a surface normal (the surface that is defined by the two vectors).
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/cross_product.png" alt="Cross product" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/cross_product.png" alt="Cross product" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
@@ -384,53 +377,51 @@ Additionally this operation is defined in <strong>R<sup>3</sup></strong>.</p>
 <p>The cross product formula is somewhat hard to remember:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/equations/cross_product.svg" alt="Cross product formula" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/equations/cross_product.svg" alt="Cross product formula" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
 </p>
 
 <p>The implementation looks like this:</p>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Cross(b Vector) Vector {
-  <span style="color: #0000aa">return</span> Vector{
+func (a Vector) Cross(b Vector) Vector {
+  return Vector{
     X: a.Y*b.Z - a.Z*b.Y,
     Y: a.Z*b.X - a.X*b.Z,
     Z: a.X*b.Y - a.Y*b.X,
   }
 }
 
-<span style="color: #0000aa">func</span> TestCrossProduct(t *testing.T) {
-  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Cross(Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>})
-  assert.Equal(t, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>}, result,
-    <span style="color: #aa5500">&quot;cross product returns a vector perpendicular to the other two&quot;</span>)
+func TestCrossProduct(t *testing.T) {
+  result := Vector{1., 0., 0.}.Cross(Vector{0., 1., 0.})
+  assert.Equal(t, Vector{0., 0., 1.}, result,
+    "cross product returns a vector perpendicular to the other two")
 }
-</pre></div>
 
 <h3 id="normalizing-a-vector">Normalizing a vector</h3>
 
 <p>Also called calculating a unit vector - versor:
 <figure >
     
-        <img src="https://szeliga.github.io/img/02-vector-operations/equations/vector_normalization.svg" alt="Vector normalization formula" style="width: auto; height: auto; margin: 0 auto; display: block;" />
+        <img src="https://szeliga.co/img/02-vector-operations/equations/vector_normalization.svg" alt="Vector normalization formula" style="width: auto; height: auto; margin: 0 auto; display: block;" />
     
     
 </figure>
 </p>
 
 <p>All we have to do, is divide (multiply by <code>1 / x</code>) each of the vectors components by the length of the vector:</p>
-<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Normalize() Vector {
-  <span style="color: #0000aa">return</span> a.MultiplyByScalar(<span style="color: #009999">1.</span> / a.Length())
+func (a Vector) Normalize() Vector {
+  return a.MultiplyByScalar(1. / a.Length())
 }
 
-<span style="color: #0000aa">func</span> TestNormalize(t *testing.T) {
-  assert.Equal(t, Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}, Vector{<span style="color: #009999">10.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Normalize(),
-    <span style="color: #aa5500">&quot;returns a unit vector (versor) from the given vector&quot;</span>)
-  assert.Equal(t, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>}, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">10.</span>, <span style="color: #009999">0.</span>}.Normalize(),
-    <span style="color: #aa5500">&quot;returns a unit vector (versor) from the given vector&quot;</span>)
-  assert.Equal(t, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>}, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">10.</span>}.Normalize(),
-    <span style="color: #aa5500">&quot;returns a unit vector (versor) from the given vector&quot;</span>)
+func TestNormalize(t *testing.T) {
+  assert.Equal(t, Vector{1., 0., 0.}, Vector{10., 0., 0.}.Normalize(),
+    "returns a unit vector (versor) from the given vector")
+  assert.Equal(t, Vector{0., 1., 0.}, Vector{0., 10., 0.}.Normalize(),
+    "returns a unit vector (versor) from the given vector")
+  assert.Equal(t, Vector{0., 0., 1.}, Vector{0., 0., 10.}.Normalize(),
+    "returns a unit vector (versor) from the given vector")
 }
-</pre></div>
 
 <h2 id="summary">Summary</h2>
 
@@ -442,9 +433,9 @@ Additionally this operation is defined in <strong>R<sup>3</sup></strong>.</p>
 				<div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'after-eight-coding';
-    var disqus_identifier = 'https:\/\/szeliga.github.io\/2016\/05\/01\/vector-operations';
+    var disqus_identifier = 'https:\/\/szeliga.co\/2016\/05\/01\/vector-operations';
     var disqus_title = 'Vector operations';
-    var disqus_url = 'https:\/\/szeliga.github.io\/2016\/05\/01\/vector-operations';
+    var disqus_url = 'https:\/\/szeliga.co\/2016\/05\/01\/vector-operations';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
