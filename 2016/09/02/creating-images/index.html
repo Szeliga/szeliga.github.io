@@ -145,99 +145,104 @@
 <h2 id="design">Design</h2>
 
 <p>The scene will be represented by a struct. Internally it will store the width and height of the desired image, as well as a pointer to an instance of <code>image.RGBA</code>.</p>
-type Scene struct {
-	Width, Height int
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">type</span> Scene <span style="color: #0000aa">struct</span> {
+	Width, Height <span style="color: #00aaaa">int</span>
 	Img           *image.RGBA
 }
+</pre></div>
 
 <h3 id="initialization">Initialization</h3>
 
 <p>In order to initialize the scene, we need to initialize the <code>image.RGBA</code> with the given dimensions. In Go this is done by creating an <code>image.Rect</code> struct and passing it to the <code>image.NewRGBA</code> function.</p>
 
 <p>The whole code required to initialize the scene will be done in the <code>NewScene</code> function. The function should accept two integers as arguments, that represent the width and height of the image:</p>
-func TestNewSceneReturnsANewScene(t *testing.T) {
-	scene := NewScene(4, 4)
-	rect := image.Rect(0, 0, 4, 4)
-	assert.Equal(t, 4, scene.Width, "sets width of the scene")
-	assert.Equal(t, 4, scene.Height, "sets height of the scene")
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> TestNewSceneReturnsANewScene(t *testing.T) {
+	scene := NewScene(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
+	rect := image.Rect(<span style="color: #009999">0</span>, <span style="color: #009999">0</span>, <span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
+	assert.Equal(t, <span style="color: #009999">4</span>, scene.Width, <span style="color: #aa5500">&quot;sets width of the scene&quot;</span>)
+	assert.Equal(t, <span style="color: #009999">4</span>, scene.Height, <span style="color: #aa5500">&quot;sets height of the scene&quot;</span>)
 	assert.True(t, assert.ObjectsAreEqualValues(rect, scene.Img.Bounds()),
-		"creates an image.RGBA with proper bounds")
+		<span style="color: #aa5500">&quot;creates an image.RGBA with proper bounds&quot;</span>)
 }
 
-func NewScene(width int, height int) *Scene {
-	return &Scene{
+<span style="color: #0000aa">func</span> NewScene(width <span style="color: #00aaaa">int</span>, height <span style="color: #00aaaa">int</span>) *Scene {
+	<span style="color: #0000aa">return</span> &amp;Scene{
 		Width:  width,
 		Height: height,
-		Img:    image.NewRGBA(image.Rect(0, 0, width, height)),
+		Img:    image.NewRGBA(image.Rect(<span style="color: #009999">0</span>, <span style="color: #009999">0</span>, width, height)),
 	}
 }
+</pre></div>
 
 <p>The <code>assert</code> library exposes some nifty helper functions, like <a href="https://godoc.org/github.com/stretchr/testify/assert#ObjectsAreEqualValues"><code>ObjectsAreEqualValues</code></a>, which does a deep equality check of an object&rsquo;s values.</p>
 
 <h3 id="test-helpers">Test helpers</h3>
 
 <p>In order to test the following functions, I needed to write two helper functions to generate a new <code>image.RGBA</code> and fill the image with a random color:</p>
-func generateImage(w, h int, pixelColor color.RGBA) *image.RGBA {
-	img := image.NewRGBA(image.Rect(0, 0, 4, 4))
-	for x := 0; x < 4; x++ {
-		for y := 0; y < 4; y++ {
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> generateImage(w, h <span style="color: #00aaaa">int</span>, pixelColor color.RGBA) *image.RGBA {
+	img := image.NewRGBA(image.Rect(<span style="color: #009999">0</span>, <span style="color: #009999">0</span>, <span style="color: #009999">4</span>, <span style="color: #009999">4</span>))
+	<span style="color: #0000aa">for</span> x := <span style="color: #009999">0</span>; x &lt; <span style="color: #009999">4</span>; x++ {
+		<span style="color: #0000aa">for</span> y := <span style="color: #009999">0</span>; y &lt; <span style="color: #009999">4</span>; y++ {
 			img.Set(x, y, pixelColor)
 		}
 	}
-	return img
+	<span style="color: #0000aa">return</span> img
 }
 
-func randomColor() color.RGBA {
+<span style="color: #0000aa">func</span> randomColor() color.RGBA {
 	rand := rand.New(rand.NewSource(time.Now().Unix()))
-	return color.RGBA{uint8(rand.Intn(255)), uint8(rand.Intn(255)), uint8(rand.Intn(255)), 255}
+	<span style="color: #0000aa">return</span> color.RGBA{<span style="color: #00aaaa">uint8</span>(rand.Intn(<span style="color: #009999">255</span>)), <span style="color: #00aaaa">uint8</span>(rand.Intn(<span style="color: #009999">255</span>)), <span style="color: #00aaaa">uint8</span>(rand.Intn(<span style="color: #009999">255</span>)), <span style="color: #009999">255</span>}
 }
+</pre></div>
 
 <p>I use these helpers to generate expected <code>image.RGBA</code> objects for <code>ObjectsAreEqualValues</code>.</p>
 
 <h3 id="traversing-the-image">Traversing the image</h3>
 
 <p>For each pixel of the image, I want to set a specific color. This can be done simply enough by a double <code>for</code> loop, but we can expose a convenience function on <code>Scene</code>, called <code>EachPixel</code>. Go allows us to specify functions as arguments for other functions. We will leverage this fact by requiring a single argument in <code>EachPixel</code> &mdash; a function with the following signature <code>func(int, int) color.RGBA</code>. The two <code>int</code> values are the <code>x</code> and <code>y</code> coordinates of the image (which will be used later on for calculating a pixel in the image plane). The full implementation of the <code>EachPixel</code> function looks like this:</p>
-func (s *Scene) EachPixel(colorFunction func(int, int) color.RGBA) {
-	for x := 0; x < s.Width; x++ {
-		for y := 0; y < s.Height; y++ {
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (s *Scene) EachPixel(colorFunction <span style="color: #0000aa">func</span>(<span style="color: #00aaaa">int</span>, <span style="color: #00aaaa">int</span>) color.RGBA) {
+	<span style="color: #0000aa">for</span> x := <span style="color: #009999">0</span>; x &lt; s.Width; x++ {
+		<span style="color: #0000aa">for</span> y := <span style="color: #009999">0</span>; y &lt; s.Height; y++ {
 			s.setPixel(x, y, colorFunction(x, y))
 		}
 	}
 }
 
-func TestSceneEachPixelSetsEachPixelToTheProvidedFunctionReturn(t *testing.T) {
-	scene := NewScene(4, 4)
+<span style="color: #0000aa">func</span> TestSceneEachPixelSetsEachPixelToTheProvidedFunctionReturn(t *testing.T) {
+	scene := NewScene(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
 	c := randomColor()
 
-	scene.EachPixel(func(x, y int) color.RGBA { return c })
-	img := generateImage(4, 4, c)
+	scene.EachPixel(<span style="color: #0000aa">func</span>(x, y <span style="color: #00aaaa">int</span>) color.RGBA { <span style="color: #0000aa">return</span> c })
+	img := generateImage(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>, c)
 	assert.True(t, assert.ObjectsAreEqualValues(img, scene.Img),
-		"sets every pixel of the image to the provided values")
+		<span style="color: #aa5500">&quot;sets every pixel of the image to the provided values&quot;</span>)
 }
+</pre></div>
 
 <p>The <code>setPixel</code> function is just an adapter for Go&rsquo;s built-in <code>image.RGBA.Set</code>.</p>
 
 <h3 id="saving-the-image">Saving the image</h3>
 
 <p>Finally I want to save the image to a PNG file. As one might suspect, Go provides such a function in the <code>image/png</code> package, called <code>png.Encode</code>. Again, I&rsquo;ve built an adapter for this function, that takes a filename, under which it should save the image.</p>
-func (s *Scene) Save(filename string) {
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (s *Scene) Save(filename <span style="color: #00aaaa">string</span>) {
 	f, err := os.Create(filename)
 
-	if err != nil {
-		panic(err)
+	<span style="color: #0000aa">if</span> err != <span style="color: #0000aa">nil</span> {
+		<span style="color: #00aaaa">panic</span>(err)
 	}
-	defer f.Close()
+	<span style="color: #0000aa">defer</span> f.Close()
 	png.Encode(f, s.Img)
 }
 
-func TestSceneSavePanicsWhenFileCannotBePersisted(t *testing.T) {
-	scene := NewScene(4, 4)
+<span style="color: #0000aa">func</span> TestSceneSavePanicsWhenFileCannotBePersisted(t *testing.T) {
+	scene := NewScene(<span style="color: #009999">4</span>, <span style="color: #009999">4</span>)
 	c := randomColor()
-	scene.EachPixel(func(x, y int) color.RGBA { return c })
-	assert.Panics(t, func() {
-		scene.Save("/etc/temp.png")
-	}, "panics when the file cannot be persisted")
+	scene.EachPixel(<span style="color: #0000aa">func</span>(x, y <span style="color: #00aaaa">int</span>) color.RGBA { <span style="color: #0000aa">return</span> c })
+	assert.Panics(t, <span style="color: #0000aa">func</span>() {
+		scene.Save(<span style="color: #aa5500">&quot;/etc/temp.png&quot;</span>)
+	}, <span style="color: #aa5500">&quot;panics when the file cannot be persisted&quot;</span>)
 }
+</pre></div>
 
 <p>Several interesting things happen in this code:</p>
 
@@ -255,30 +260,31 @@ func TestSceneSavePanicsWhenFileCannotBePersisted(t *testing.T) {
 <h3 id="putting-it-all-together">Putting it all together</h3>
 
 <p>Here&rsquo;s a simple main function that fills the image with values based on the current pixel:</p>
-package main
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">package</span> main
 
-import (
-	"fmt"
-	"image/color"
-	"time"
+<span style="color: #0000aa">import</span> (
+	<span style="color: #aa5500">&quot;fmt&quot;</span>
+	<span style="color: #aa5500">&quot;image/color&quot;</span>
+	<span style="color: #aa5500">&quot;time&quot;</span>
 
-	"github.com/szeliga/goray/engine"
+	<span style="color: #aa5500">&quot;github.com/szeliga/goray/engine&quot;</span>
 )
 
-func main() {
-	var width = 200
-	var height = 200
+<span style="color: #0000aa">func</span> main() {
+	<span style="color: #0000aa">var</span> width = <span style="color: #009999">200</span>
+	<span style="color: #0000aa">var</span> height = <span style="color: #009999">200</span>
 	scene := engine.NewScene(width, height)
-	scene.EachPixel(func(x, y int) color.RGBA {
-		return color.RGBA{
-			uint8(x * 255 / width),
-			uint8(y * 255 / height),
-			100,
-			255,
+	scene.EachPixel(<span style="color: #0000aa">func</span>(x, y <span style="color: #00aaaa">int</span>) color.RGBA {
+		<span style="color: #0000aa">return</span> color.RGBA{
+			<span style="color: #00aaaa">uint8</span>(x * <span style="color: #009999">255</span> / width),
+			<span style="color: #00aaaa">uint8</span>(y * <span style="color: #009999">255</span> / height),
+			<span style="color: #009999">100</span>,
+			<span style="color: #009999">255</span>,
 		}
 	})
-	scene.Save(fmt.Sprintf("./renders/%d.png", time.Now().Unix()))
+	scene.Save(fmt.Sprintf(<span style="color: #aa5500">&quot;./renders/%d.png&quot;</span>, time.Now().Unix()))
 }
+</pre></div>
 
 <p>This code produces the following image:
 <figure >

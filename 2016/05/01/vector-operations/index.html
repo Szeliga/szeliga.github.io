@@ -147,14 +147,15 @@
 <p>First thing I need to do, is define how vectors will be represented in the code. I&rsquo;m coming from a highly object oriented language (ruby), so naturally I picked a thing that ressembles objects the most - <code>struct</code> (this may not be the Go way, so if You have any other propositions, please ping me).</p>
 
 <p>So let&rsquo;s define a struct that will represent a 3 dimensional vector with coordinates <code>(x, y, z)</code>:</p>
-package core
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">package</span> core
 
-import "math"
+<span style="color: #0000aa">import</span> <span style="color: #aa5500">&quot;math&quot;</span>
 
-// Vector - struct holding X Y Z values of a 3D vector
-type Vector struct {
-  X, Y, Z float64
+<span style="color: #aaaaaa; font-style: italic">// Vector - struct holding X Y Z values of a 3D vector</span>
+<span style="color: #0000aa">type</span> Vector <span style="color: #0000aa">struct</span> {
+  X, Y, Z <span style="color: #00aaaa">float64</span>
 }
+</pre></div>
 
 <p><em>Note that the struct&rsquo;s name and all of the coordinates are written in capital letters. That&rsquo;s because in Go, only stuff that&rsquo;s written in capital letters gets exported when your package is imported somewhere. Lowercase functions, structs, etc. are available only inside the package. If you want some more information about this, visit 
 
@@ -176,22 +177,24 @@ Methods are plain Go functions, but they are defined with a receiver that comes 
 <ul>
 <li>Pointer receiver</li>
 </ul>
-  func (a *Vector) Add(b Vector) Vector {
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span>  <span style="color: #0000aa">func</span> (a *Vector) Add(b Vector) Vector {
     a.X += b.X
     a.Y += b.Y
     a.Z += b.Z
-    return a
+    <span style="color: #0000aa">return</span> a
   }
+</pre></div>
 
 <ul>
 <li>Value receiver</li>
 </ul>
-  func (a Vector) Add(b Vector) Vector {
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span>  <span style="color: #0000aa">func</span> (a Vector) Add(b Vector) Vector {
     a.X += b.X
     a.Y += b.Y
     a.Z += b.Z
-    return a
+    <span style="color: #0000aa">return</span> a
   }
+</pre></div>
 
 <p>The core difference between these two is that, the one that is defined on a pointer receiver, will mutate the actual object it was called on. Analogically a method called on a value receiver will not mutate the receiver, because it will operate on a copy of the original receiver.</p>
 
@@ -212,18 +215,19 @@ This type of notation allows for a verbose representation of the equations used 
     
 </figure>
 </p>
-func (a Vector) Add(b Vector) Vector {
-  return Vector{
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Add(b Vector) Vector {
+  <span style="color: #0000aa">return</span> Vector{
     X: a.X + b.X,
     Y: a.Y + b.Y,
     Z: a.Z + b.Z,
   }
 }
 
-func TestAdd(t *testing.T) {
-  result := Vector{1., 1., 1.}.Add(Vector{2., 2., 2.})
-  assert.Equal(t, Vector{3., 3., 3.}, result, "should add correctly")
+<span style="color: #0000aa">func</span> TestAdd(t *testing.T) {
+  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>}.Add(Vector{<span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>})
+  assert.Equal(t, Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>}, result, <span style="color: #aa5500">&quot;should add correctly&quot;</span>)
 }
+</pre></div>
 
 <h3 id="subtracting-two-vectors">Subtracting two vectors</h3>
 
@@ -237,18 +241,19 @@ func TestAdd(t *testing.T) {
 </p>
 
 <p>Analogically to addition of two vectors, we subtract the corresponding coefficients of two vectors:</p>
-func (a Vector) Sub(b Vector) Vector {
-  return Vector{
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Sub(b Vector) Vector {
+  <span style="color: #0000aa">return</span> Vector{
     X: a.X - b.X,
     Y: a.Y - b.Y,
     Z: a.Z - b.Z,
   }
 }
 
-func TestSub(t *testing.T) {
-  result := Vector{3., 3., 3.}.Sub(Vector{1., 1., 1.})
-  assert.Equal(t, Vector{2., 2., 2.}, result, "should subtract correcly")
+<span style="color: #0000aa">func</span> TestSub(t *testing.T) {
+  result := Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>}.Sub(Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">1.</span>})
+  assert.Equal(t, Vector{<span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>, <span style="color: #009999">2.</span>}, result, <span style="color: #aa5500">&quot;should subtract correcly&quot;</span>)
 }
+</pre></div>
 
 <h3 id="multiplying-vector-by-scalar">Multiplying vector by scalar</h3>
 
@@ -261,19 +266,20 @@ func TestSub(t *testing.T) {
     
 </figure>
 
-func (a Vector) MultiplyByScalar(s float64) Vector {
-  return Vector{
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) MultiplyByScalar(s <span style="color: #00aaaa">float64</span>) Vector {
+  <span style="color: #0000aa">return</span> Vector{
     X: a.X * s,
     Y: a.Y * s,
     Z: a.Z * s,
   }
 }
 
-func TestMultiplyByScalar(t *testing.T) {
-  result := Vector{3., 3., 3.}.MultiplyByScalar(2.)
-  assert.Equal(t, Vector{6., 6., 6.}, result,
-    "should multiply each component by given scalar")
+<span style="color: #0000aa">func</span> TestMultiplyByScalar(t *testing.T) {
+  result := Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>, <span style="color: #009999">3.</span>}.MultiplyByScalar(<span style="color: #009999">2.</span>)
+  assert.Equal(t, Vector{<span style="color: #009999">6.</span>, <span style="color: #009999">6.</span>, <span style="color: #009999">6.</span>}, result,
+    <span style="color: #aa5500">&quot;should multiply each component by given scalar&quot;</span>)
 }
+</pre></div>
 
 <p><em>As a bonus, we also get division by a scalar, by multiplying by <code>1/s</code></em></p>
 
@@ -318,19 +324,20 @@ This operation is particurarly important in the context of the ray tracing algor
 <p>This two cases give us a way to determine if two rays are orthogonal or codirectional, which has a huge meaning when evaluating materials of objects.</p>
 
 <p>With the theoretical stuff out of the way, let&rsquo;s proceed with the implementation:</p>
-func (a Vector) Dot(b Vector) float64 {
-  return a.X*b.X + a.Y*b.Y + a.Z*b.Z
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Dot(b Vector) <span style="color: #00aaaa">float64</span> {
+  <span style="color: #0000aa">return</span> a.X*b.X + a.Y*b.Y + a.Z*b.Z
 }
 
-func TestDotProductOfTwoPerpendicularVectors(t *testing.T) {
-  result := Vector{1., 0., 0.}.Dot(Vector{0., 1., 0.})
-  assert.Equal(t, 0., result, "dot product of two perpendicular vectors is 0")
+<span style="color: #0000aa">func</span> TestDotProductOfTwoPerpendicularVectors(t *testing.T) {
+  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Dot(Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>})
+  assert.Equal(t, <span style="color: #009999">0.</span>, result, <span style="color: #aa5500">&quot;dot product of two perpendicular vectors is 0&quot;</span>)
 }
 
-func TestDotProductOfTwoParallelVectors(t *testing.T) {
-  result := Vector{1., 0., 0.}.Dot(Vector{1., 0., 0.})
-  assert.Equal(t, 1., result, "dot product of two parallel vectors is 1")
+<span style="color: #0000aa">func</span> TestDotProductOfTwoParallelVectors(t *testing.T) {
+  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Dot(Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>})
+  assert.Equal(t, <span style="color: #009999">1.</span>, result, <span style="color: #aa5500">&quot;dot product of two parallel vectors is 1&quot;</span>)
 }
+</pre></div>
 
 <p>Pretty simple, eh?</p>
 
@@ -347,18 +354,19 @@ func TestDotProductOfTwoParallelVectors(t *testing.T) {
 
 <p>As you can see, it&rsquo;s basically a dot product of a vector with itself, under a square root.
 So we can use the already implemented <code>Dot</code> method, to implement this one:</p>
-func (a Vector) Length() float64 {
-  return math.Sqrt(a.Dot(a))
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Length() <span style="color: #00aaaa">float64</span> {
+  <span style="color: #0000aa">return</span> math.Sqrt(a.Dot(a))
 }
 
-func TestLength(t *testing.T) {
-  assert.Equal(t, 3., Vector{3., 0., 0.}.Length(),
-    "calculates the length(magnitude) correctly for Vector{3., 0., 0.}")
-  assert.Equal(t, 6., Vector{6., 0., 0.}.Length(),
-    "calculates the length(magnitude) correctly for Vector{6., 0., 0.}")
-  assert.Equal(t, 6.324555320336759, Vector{6., 2., 0.}.Length(),
-    "calculates the length(magnitude) correctly for Vector{6., 2., 0.}")
+<span style="color: #0000aa">func</span> TestLength(t *testing.T) {
+  assert.Equal(t, <span style="color: #009999">3.</span>, Vector{<span style="color: #009999">3.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Length(),
+    <span style="color: #aa5500">&quot;calculates the length(magnitude) correctly for Vector{3., 0., 0.}&quot;</span>)
+  assert.Equal(t, <span style="color: #009999">6.</span>, Vector{<span style="color: #009999">6.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Length(),
+    <span style="color: #aa5500">&quot;calculates the length(magnitude) correctly for Vector{6., 0., 0.}&quot;</span>)
+  assert.Equal(t, <span style="color: #009999">6.324555320336759</span>, Vector{<span style="color: #009999">6.</span>, <span style="color: #009999">2.</span>, <span style="color: #009999">0.</span>}.Length(),
+    <span style="color: #aa5500">&quot;calculates the length(magnitude) correctly for Vector{6., 2., 0.}&quot;</span>)
 }
+</pre></div>
 
 <h3 id="cross-product-of-two-vectors">Cross product of two vectors</h3>
 
@@ -384,19 +392,20 @@ Additionally this operation is defined in <strong>R<sup>3</sup></strong>.</p>
 </p>
 
 <p>The implementation looks like this:</p>
-func (a Vector) Cross(b Vector) Vector {
-  return Vector{
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Cross(b Vector) Vector {
+  <span style="color: #0000aa">return</span> Vector{
     X: a.Y*b.Z - a.Z*b.Y,
     Y: a.Z*b.X - a.X*b.Z,
     Z: a.X*b.Y - a.Y*b.X,
   }
 }
 
-func TestCrossProduct(t *testing.T) {
-  result := Vector{1., 0., 0.}.Cross(Vector{0., 1., 0.})
-  assert.Equal(t, Vector{0., 0., 1.}, result,
-    "cross product returns a vector perpendicular to the other two")
+<span style="color: #0000aa">func</span> TestCrossProduct(t *testing.T) {
+  result := Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Cross(Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>})
+  assert.Equal(t, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>}, result,
+    <span style="color: #aa5500">&quot;cross product returns a vector perpendicular to the other two&quot;</span>)
 }
+</pre></div>
 
 <h3 id="normalizing-a-vector">Normalizing a vector</h3>
 
@@ -410,18 +419,19 @@ func TestCrossProduct(t *testing.T) {
 </p>
 
 <p>All we have to do, is divide (multiply by <code>1 / x</code>) each of the vectors components by the length of the vector:</p>
-func (a Vector) Normalize() Vector {
-  return a.MultiplyByScalar(1. / a.Length())
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #0000aa">func</span> (a Vector) Normalize() Vector {
+  <span style="color: #0000aa">return</span> a.MultiplyByScalar(<span style="color: #009999">1.</span> / a.Length())
 }
 
-func TestNormalize(t *testing.T) {
-  assert.Equal(t, Vector{1., 0., 0.}, Vector{10., 0., 0.}.Normalize(),
-    "returns a unit vector (versor) from the given vector")
-  assert.Equal(t, Vector{0., 1., 0.}, Vector{0., 10., 0.}.Normalize(),
-    "returns a unit vector (versor) from the given vector")
-  assert.Equal(t, Vector{0., 0., 1.}, Vector{0., 0., 10.}.Normalize(),
-    "returns a unit vector (versor) from the given vector")
+<span style="color: #0000aa">func</span> TestNormalize(t *testing.T) {
+  assert.Equal(t, Vector{<span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}, Vector{<span style="color: #009999">10.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>}.Normalize(),
+    <span style="color: #aa5500">&quot;returns a unit vector (versor) from the given vector&quot;</span>)
+  assert.Equal(t, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>, <span style="color: #009999">0.</span>}, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">10.</span>, <span style="color: #009999">0.</span>}.Normalize(),
+    <span style="color: #aa5500">&quot;returns a unit vector (versor) from the given vector&quot;</span>)
+  assert.Equal(t, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">1.</span>}, Vector{<span style="color: #009999">0.</span>, <span style="color: #009999">0.</span>, <span style="color: #009999">10.</span>}.Normalize(),
+    <span style="color: #aa5500">&quot;returns a unit vector (versor) from the given vector&quot;</span>)
 }
+</pre></div>
 
 <h2 id="summary">Summary</h2>
 
